@@ -1,0 +1,13 @@
+check table equipments, add som columns
+check table borrows
+
+change supplier from office_equipment to foreign ket after create table supplier
+
+alter tbl accounts nullable user_id (not all employee will have an account)
+
+alter tbl maintenance nullabel serve_by_id kay dili pa ma entry kung kinsa mg repaire during request
+
+
+**** NOTE ****
+Copy the table data of role
+always put the GENERAL SERVICES id to 1 at the office table

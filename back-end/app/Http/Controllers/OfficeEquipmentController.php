@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+use App\Models\OfficeEquipment;
+
+use App\Http\Requests\OfficeEquipmentRequest;
+
+class OfficeEquipmentController extends Controller
+{
+    //
+    public function index()
+    {
+        $office_equipments = OfficeEquipment::with('office', 'custodian', 'equipment')->get();
+        return response()->json($office_equipments);
+    }
+
+    public function show($id)
+    {
+        $office_equipment = OfficeEquipment::with('office', 'custodian', 'equipment')->where('id', $id)->get();
+        return response()->json($office_equipment);
+    }
+
+    public function store(Request $request)
+    {
+        $office_equipment = new OfficeEquipment([
+            'office_id' => $request->get('office_id'),
+            'user_id' => $request->get('user_id'),
+            'equipment_id' => $request->get('equipment_id'),
+            'code' => $request->get('code'),
+            'serial' => $request->get('serial'),
+            'amount' => $request->get('amount'),
+            'status' => 'working',
+            'supplier' => $request->get('supplier'),
+        ]);
+        $office_equipment->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => "Successfully Updated",
+        ], 200);
+    }
+
+}
