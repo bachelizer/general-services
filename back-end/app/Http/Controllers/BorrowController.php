@@ -10,6 +10,8 @@ use App\Http\Requests\BorrowRequest;
 
 use PDF;
 
+use DB;
+
 class BorrowController extends Controller
 {
     public function index()
@@ -101,6 +103,15 @@ class BorrowController extends Controller
         $borrows = Borrow::with('borrower', 'approver', 'office', 'equipment')->find($id);
         $pdf = PDF::loadView('borrowForm',  $borrows->toArray());
         return $pdf->download('gen-services-borrow.pdf');
+    }
+
+    public function borrowDashBoardStatistics()
+    {
+        $borrows = DB::table('borrows')
+        ->select('approval_status', DB::raw('count(*) as total'))
+        ->groupBy('approval_status')
+        ->get();
+        return response()->json($borrows);
     }
    
 }

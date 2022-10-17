@@ -17,7 +17,16 @@
                 <v-checkbox v-model="isMainten" label="Maintenance"></v-checkbox>
               </v-col>
               <v-col cols>
-                <v-select :disabled="!isMainten" outlined :items="maintenanceIntervals" label="Maintenance Interval" :item-text="(x) => isMainten ? x.desc : ''" :item-value="(x) => isMainten ? x.days : ''"> </v-select>
+                <v-select
+                  v-model="maintenanceInterval"
+                  :disabled="!isMainten"
+                  outlined
+                  :items="maintenanceIntervals"
+                  label="Maintenance Interval"
+                  :item-text="x => (isMainten ? x.desc : '')"
+                  item-value="days"
+                >
+                </v-select>
               </v-col>
             </v-row>
           </v-card-text>
@@ -48,6 +57,7 @@ export default {
     return {
       equipment: '',
       isMainten: false,
+      maintenanceInterval: null,
       maintenanceIntervals: [
         {
           desc: 'Weekly',
@@ -70,11 +80,19 @@ export default {
   },
   created() {},
   methods: {
+    clear() {
+      this.equipment = '';
+      this.isMainten = false;
+      this.maintenanceInterval = null;
+    },
     async handleSubmit() {
       const payload = {
         equipment: this.equipment,
+        maintenance_interval: this.isMainten ? this.maintenanceInterval : null,
       };
+      // console.log(payload);
       await this.$store.dispatch('equipment/createEquipment', payload);
+      this.clear();
       this.$emit('close');
     },
   },

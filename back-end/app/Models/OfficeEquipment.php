@@ -12,7 +12,7 @@ use App\Models\Equipment;
 class OfficeEquipment extends Model
 {
     use HasFactory;
-    protected $fillable = ['office_id', 'user_id', 'equipment_id', 'code', 'serial', 'amount', 'status', 'supplier', 'date_disposed'];
+    protected $fillable = ['office_id', 'user_id', 'equipment_id', 'code', 'serial', 'amount', 'status', 'supplier', 'date_disposed', 'maintenance_day'];
 
     public function office()
     {

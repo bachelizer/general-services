@@ -25,10 +25,13 @@ class EquipmentController extends Controller
     public function store(EquipmentRequest $request)
     {
         $equipment = new Equipment([
-            'equipment' => $request->get('equipment')
+            'equipment' => $request->get('equipment'),
+            'maintenance_interval' => $request->get('maintenance_interval')
         ]);
         $equipment->save();
-        return response()->json('Successfully Added');
+        return response()->json(['status' => true,
+        'message' => "Successfully Added",
+    ], 200);
     }
     
     public function update(Request $request, $id)

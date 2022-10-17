@@ -25,7 +25,8 @@ class EquipmentRequest extends FormRequest
     {
         return [
             //
-            'equipment' => ['required']
+            'equipment' => ['required'],
+            'maintenance_interval' => ['nullable']
         ];
     }
 }

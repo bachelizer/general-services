@@ -13,6 +13,7 @@ export default {
   state: {
     borrows: [],
     reportData: [],
+    statisticsBorrow: [],
   },
   mutations: {
     SET_REPORT_DATA(state, array) {
@@ -21,12 +22,15 @@ export default {
     SET_BORROWS(state, list) {
       state.borrows = list;
     },
+    SET_BORROW_STATISTICS(state, list) {
+      state.statisticsBorrow = list;
+    },
   },
   actions: {
     async fetchBorrows({ commit }) {
       try {
         const { data } = await borrow.fetchBorrows();
-        const array = await utils.filterData( this.state.auth.userCredential.data.office_id , data)
+        const array = await utils.filterData(this.state.auth.userCredential.data.office_id, data);
         commit('SET_BORROWS', array);
       } catch (error) {
         throw error;
@@ -37,7 +41,7 @@ export default {
         request_by_id: this.state.auth.userCredential.data.user_id,
         office_id: this.state.auth.userCredential.data.office_id,
         ...data,
-      }
+      };
       try {
         await borrow.postBorrows(payload);
       } catch (e) {
@@ -66,22 +70,24 @@ export default {
       }
     },
 
-    async borrowReportData({ commit }, payload) 
-    {
+    async borrowReportData({ commit }, payload) {
       try {
-        const { data } = await borrow.borrowReport(payload)
-        commit('SET_REPORT_DATA', data)
-      } catch(e) {
+        const { data } = await borrow.borrowReport(payload);
+        commit('SET_REPORT_DATA', data);
+      } catch (e) {
         throw e;
       }
     },
     printForm({ commit }, payload) {
       try {
         borrow.printForm(payload);
-      } catch(e) {
+      } catch (e) {
         throw e;
       }
     },
-
+    async getBorrowStatistics({ commit }) {
+      const { data } = await borrow.getBorrowStatistics();
+      commit('SET_BORROW_STATISTICS', data);
+    },
   },
 };

@@ -18,6 +18,10 @@ export default {
     SET_OFFICE_EQUIPMENTS(state, list) {
       state.officeEquipments = list;
     },
+    SET_MAINTENACE_NOTIFICATION(state, list) {
+      state.officeEquipments = list;
+    },
+
   },
   actions: {
     async fetchOfficeEquipment({ commit }) {
@@ -51,5 +55,14 @@ export default {
         throw e;
       }
     },
+    async officeEquipmentMaintenanceNotification({ commit }) {
+      try {
+        const { data } = await equipment.officeEquipmentMaintenanceNotification();
+        commit('SET_MAINTENACE_NOTIFICATION', data);
+      }
+      catch (error) {
+        throw error;
+      }
+    }
   },
 };

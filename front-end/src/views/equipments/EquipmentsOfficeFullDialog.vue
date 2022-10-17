@@ -33,13 +33,24 @@
                   </v-icon>
                 </v-btn>
               </v-row>
-              <v-data-table :headers="headers" :items="equipments" :search="search"> </v-data-table>
+              <v-data-table :headers="headers" :items="equipments" :search="search">
+                <template v-slot:item.maintenance_day="{ item }">
+                  <v-chip small class="ma-2" :color="getStatusColor(item.maintenance_day)">
+                    {{ getDaysStatus(item.maintenance_day) }}
+                  </v-chip>
+                </template>
+              </v-data-table>
             </v-card>
           </v-col>
         </v-row>
       </v-card>
     </v-dialog>
-    <equipment-office-form :officeId="officeId" :dialog="officeFormDialog" :data="formData" @close="officeFormDialog = false"></equipment-office-form>
+    <equipment-office-form
+      :officeId="officeId"
+      :dialog="officeFormDialog"
+      :data="formData"
+      @close="officeFormDialog = false"
+    ></equipment-office-form>
   </v-layout>
 </template>
 <script>
@@ -77,6 +88,10 @@ export default {
           value: 'code',
         },
         {
+          text: 'Days left for regular maintenance',
+          value: 'maintenance_day',
+        },
+        {
           text: 'Serial Number',
           value: 'serial',
         },
@@ -90,6 +105,19 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    getStatusColor(data) {
+      if (data === null) return 'success';
+      if (data <= 3 && data !== 0) return 'warning';
+      if (data === 0) return 'error';
+      return 'success';
+    },
+    getDaysStatus(data) {
+      if (data === null) return 'N/A';
+      if (data <= 1) return `${data} day`;
+      return `${data} days`;
+    },
   },
 };
 </script>

@@ -16,6 +16,8 @@ const borrowReport = payload =>
 
 const printForm = payload => generalServicesClient.get(`/borrows/report/generate-pdf?id=${payload.id}`);
 
+const getBorrowStatistics = () => generalServicesClient.get('/borrows/statistics');
+
 export default {
   fetchBorrows,
   postBorrows,
@@ -24,4 +26,5 @@ export default {
   returnBorrow,
   borrowReport,
   printForm,
+  getBorrowStatistics,
 };

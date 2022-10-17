@@ -1,42 +1,34 @@
 <template>
   <v-card>
     <v-card-title class="align-start">
-      <span class="font-weight-semibold">Statistics Card</span>
-      <v-spacer></v-spacer>
-      <v-btn icon small class="me-n3 mt-n2">
-        <v-icon>
-          {{ icons.mdiDotsVertical }}
-        </v-icon>
-      </v-btn>
+      <span class="font-weight-semibold">Borrow Statistics Card</span>
     </v-card-title>
 
-    <v-card-subtitle class="mb-8 mt-n5">
+    <!-- <v-card-subtitle class="mb-8 mt-n5">
       <span class="font-weight-semibold text--primary me-1">Total 48.5% Growth</span>
       <span>😎 this month</span>
-    </v-card-subtitle>
+    </v-card-subtitle> -->
 
     <v-card-text>
       <v-row>
         <v-col
-          v-for="data in statisticsData"
+          v-for="data in statisticsBorrow"
           :key="data.title"
-          cols="6"
-          md="3"
           class="d-flex align-center"
         >
           <v-avatar
             size="44"
-            :color="resolveStatisticsIconVariation(data.title).color"
+            :color="resolveStatisticsIconVariation(data.approval_status).color"
             rounded
             class="elevation-1"
           >
             <v-icon dark color="white" size="30">
-              {{ resolveStatisticsIconVariation(data.title).icon }}
+              {{ resolveStatisticsIconVariation(data.approval_status).icon }}
             </v-icon>
           </v-avatar>
           <div class="ms-3">
             <p class="text-xs mb-0">
-              {{ data.title }}
+              {{ data.approval_status }}
             </p>
             <h3 class="text-xl font-weight-semibold">
               {{ data.total }}
@@ -56,34 +48,37 @@ import {
   mdiTrendingUp,
   mdiDotsVertical,
   mdiLabelOutline,
+  mdiAccountClockOutline,
 } from '@mdi/js';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   setup() {
     const statisticsData = [
       {
-        title: 'Sales',
-        total: '245k',
+        title: 'Pending',
+        total: '5',
       },
       {
-        title: 'Customers',
-        total: '12.5k',
+        title: 'Approved',
+        total: '3',
       },
       {
-        title: 'Product',
-        total: '1.54k',
+        title: 'Rejected',
+        total: '10',
       },
       {
-        title: 'Revenue',
-        total: '$88k',
+        title: 'Returned',
+        total: '1',
       },
     ];
 
     const resolveStatisticsIconVariation = data => {
-      if (data === 'Sales') return { icon: mdiTrendingUp, color: 'primary' };
-      if (data === 'Customers') return { icon: mdiAccountOutline, color: 'success' };
-      if (data === 'Product') return { icon: mdiLabelOutline, color: 'warning' };
-      if (data === 'Revenue') return { icon: mdiCurrencyUsd, color: 'info' };
+      if (data === 'Pending') return { icon: mdiAccountClockOutline, color: 'warning' };
+      if (data === 'Approved') return { icon: mdiAccountOutline, color: 'success' };
+      if (data === 'Rejected') return { icon: mdiLabelOutline, color: 'error' };
+      if (data === 'Returned') return { icon: mdiCurrencyUsd, color: 'primary' };
+      if (data === 'Consent') return { icon: mdiCurrencyUsd, color: 'info' };
 
       return { icon: mdiAccountOutline, color: 'success' };
     };
@@ -101,6 +96,18 @@ export default {
         mdiCurrencyUsd,
       },
     };
+  },
+  created() {
+    this.fngetBorrowStatistics();
+  },
+  methods: {
+    ...mapActions('borrow', ['getBorrowStatistics']),
+    fngetBorrowStatistics() {
+      this.getBorrowStatistics();
+    },
+  },
+  computed: {
+    ...mapState('borrow', ['statisticsBorrow']),
   },
 };
 </script>

@@ -13,6 +13,7 @@ export default {
     maintenances: [],
     services: [],
     reportData: [],
+    servicesStatistics: [],
   },
   mutations: {
     SET_REPORT_DATA(state, array) {
@@ -34,6 +35,9 @@ export default {
     },
     SET_SERVICES(state, list) {
       state.services = list;
+    },
+    SET_SERVICES_STATISTICS(state, list) {
+      state.servicesStatistics = list;
     },
   },
   actions: {
@@ -96,6 +100,10 @@ export default {
       } catch (e) {
         throw e;
       }
+    },
+    async getServicesStatistics({ commit }) {
+      const { data } = await service.getServicesStatistics();
+      commit('SET_SERVICES_STATISTICS', data);
     },
   },
 };

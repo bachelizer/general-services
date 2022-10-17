@@ -26,6 +26,7 @@
                   :items="equipments"
                   item-text="equipment"
                   item-value="id"
+                  @change="regularMaintenance"
                 ></v-autocomplete>
               </v-col>
             </v-row>
@@ -101,7 +102,26 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      maintenanceIntervals: [
+        {
+          desc: 'Weekly',
+          days: 7,
+        },
+        {
+          desc: 'Monthly',
+          days: 31,
+        },
+        {
+          desc: 'Semiannually',
+          days: 180,
+        },
+        {
+          desc: 'Anually',
+          days: 365,
+        },
+      ],
+    };
   },
   created() {
     this.onLoad();
@@ -118,11 +138,16 @@ export default {
       const payload = { ...this.data, office_id: this.officeId };
       try {
         await this.creatOfficeEquipment(payload);
+        this.onLoad();
         this.$emit('close');
       } catch (e) {
         console.log(e);
         alert(e.message);
       }
+    },
+    regularMaintenance() {
+      const equipment = this.equipments.filter(x => x.id === this.data.equipment_id);
+      this.data.maintenance_day = equipment[0].maintenance_interval;
     },
   },
   computed: {

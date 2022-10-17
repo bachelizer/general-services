@@ -944,6 +944,11 @@
     "cssnano-preset-default" "^4.0.0"
     "postcss" "^7.0.0"
 
+"@mdi/font@^7.0.96":
+  "integrity" "sha512-rzlxTfR64hqY8yiBzDjmANfcd8rv+T5C0Yedv/TWk2QyAQYdc66e0kaN1ipmnYU3RukHRTRcBARHzzm+tIhL7w=="
+  "resolved" "https://registry.npmjs.org/@mdi/font/-/font-7.0.96.tgz"
+  "version" "7.0.96"
+
 "@mdi/js@^5.9.55":
   "integrity" "sha512-BbeHMgeK2/vjdJIRnx12wvQ6s8xAYfvMmEAVsUx9b+7GiQGQ9Za8jpwp17dMKr9CgKRvemlAM4S7S3QOtEbp4A=="
   "resolved" "https://registry.npmjs.org/@mdi/js/-/js-5.9.55.tgz"

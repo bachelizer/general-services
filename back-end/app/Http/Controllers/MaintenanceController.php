@@ -10,6 +10,8 @@ use App\Http\Requests\BorrowRequest;
 
 use PDF;
 
+use DB;
+
 class MaintenanceController extends Controller
 {
     //
@@ -123,4 +125,14 @@ class MaintenanceController extends Controller
         $pdf = PDF::loadView('service-form',  $maintenance->toArray());
         return $pdf->download('gen-services-service.pdf');
     }
+
+    public function serviceDashboardStatistics() 
+    {
+        $services = DB::table('maintenances')
+        ->select('request_status', DB::raw('count(request_status) as total'))
+        ->groupBy('request_status')
+        ->get();
+        return response()->json($services);
+    }
+
 }

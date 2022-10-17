@@ -22,10 +22,17 @@
             </v-btn>
           </v-row>
         </v-col>
-        <v-data-table :headers="headers" :items="equipments" :search="search"> </v-data-table>
+        <v-data-table :headers="headers" :items="equipments" :search="search">
+          <template v-slot:item.maintenance_interval="{ item }">
+            <span>{{ maintenInterval(item.maintenance_interval) }}</span>
+          </template>
+        </v-data-table>
       </v-card>
     </v-col>
-    <equipment-form :dialog="equipmentFormDialog" @close="equipmentFormDialog = false"></equipment-form>
+    <equipment-form
+      :dialog="equipmentFormDialog"
+      @close="equipmentFormDialog = false"
+    ></equipment-form>
   </v-row>
 </template>
 <script>
@@ -53,6 +60,10 @@ export default {
           text: 'Equipment',
           value: 'equipment',
         },
+        {
+          text: 'Regular Maintenance Interval',
+          value: 'maintenance_interval',
+        },
       ],
     };
   },
@@ -63,6 +74,13 @@ export default {
     ...mapActions('equipment', ['fetchEquipment']),
     onLoad() {
       this.fetchEquipment();
+    },
+    maintenInterval(days) {
+      if (days === 7) return 'Weekly';
+      if (days === 31) return 'Monthly';
+      if (days === 180) return 'Semiannually';
+      if (days === 365) return 'Annully';
+      return 'None';
     },
   },
   computed: {

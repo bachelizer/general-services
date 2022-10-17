@@ -12,7 +12,7 @@ class Equipment extends Model
     use HasFactory;
     public $timestamps = false;
     protected $table = 'equipments';
-    protected $fillable = ['equipment'];
+    protected $fillable = ['equipment', 'maintenance_interval'];
 
   
 }
