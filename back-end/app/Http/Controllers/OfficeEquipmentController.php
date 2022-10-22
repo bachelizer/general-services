@@ -35,6 +35,7 @@ class OfficeEquipmentController extends Controller
             'status' => 'working',
             'supplier' => $request->get('supplier'),
             'maintenance_day'  => $request->get('maintenance_day'),
+            'days_maintenance' =>  $request->get('maintenance_day'),
         ]);
         $office_equipment->save();
 
@@ -50,6 +51,21 @@ class OfficeEquipmentController extends Controller
         ->where('maintenance_day', '<=', 3)
         ->orderBy('maintenance_day', 'asc')->get();
         return response()->json($office_equipments);
+    }
+
+    public function regularOfficeEquipmentMaintenance(Request $request, $id) 
+    {
+        $equipment = OfficeEquipment::find($id);
+        
+        $equipment->maintained_by =  $request->get('maintained_by');
+        $equipment->action_taken =  $request->get('action_taken');
+        $equipment->maintenance_day =  $request->get('maintenance_day');
+        $equipment->save();
+        
+        return response()->json([
+            'status' => true,
+            'message' => "Successfully Updated",
+        ], 200);
     }
 
 

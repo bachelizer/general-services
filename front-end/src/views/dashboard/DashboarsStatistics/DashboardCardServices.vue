@@ -43,12 +43,8 @@
 <script>
 // eslint-disable-next-line object-curly-newline
 import {
-  mdiAccountOutline,
-  mdiCurrencyUsd,
-  mdiTrendingUp,
-  mdiDotsVertical,
-  mdiLabelOutline,
   mdiAccountClockOutline,
+  mdiCheckDecagramOutline 
 } from '@mdi/js';
 import { mapActions, mapState } from 'vuex';
 
@@ -71,10 +67,10 @@ export default {
 
     const resolveStatisticsIconVariation = data => {
       if (data === 'Pending') return { icon: mdiAccountClockOutline, color: 'warning' };
-      if (data === 'Served') return { icon: mdiLabelOutline, color: 'success' };
-      if (data === 'Fulfilled') return { icon: mdiCurrencyUsd, color: 'primary' };
+      if (data === 'Served') return { icon: mdiCheckDecagramOutline, color: 'success' };
+      if (data === 'Fulfilled') return { icon: mdiCheckDecagramOutline, color: 'primary' };
 
-      return { icon: mdiAccountOutline, color: 'success' };
+      return { icon: mdiTagCheckOutline , color: 'success' };
     };
 
     return {
@@ -83,11 +79,8 @@ export default {
 
       // icons
       icons: {
-        mdiDotsVertical,
-        mdiTrendingUp,
-        mdiAccountOutline,
-        mdiLabelOutline,
-        mdiCurrencyUsd,
+        mdiAccountClockOutline,
+        mdiCheckDecagramOutline,
       },
     };
   },

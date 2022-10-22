@@ -63,6 +63,13 @@ export default {
       catch (error) {
         throw error;
       }
+    },
+    async officeEquipmentRegularMaintenance({ commit }, payload) {
+      try {
+        await equipment.officeEquipmentRegularMaintenance(payload, payload.id)
+      } catch(error) {
+        throw error;
+      }
     }
   },
 };

@@ -43,11 +43,10 @@
 <script>
 // eslint-disable-next-line object-curly-newline
 import {
-  mdiAccountOutline,
-  mdiCurrencyUsd,
-  mdiTrendingUp,
-  mdiDotsVertical,
-  mdiLabelOutline,
+  mdiAccountEditOutline,
+  mdiCheckDecagramOutline,
+  mdiAlertDecagramOutline,
+  mdiTagCheckOutline,
   mdiAccountClockOutline,
 } from '@mdi/js';
 import { mapActions, mapState } from 'vuex';
@@ -75,12 +74,12 @@ export default {
 
     const resolveStatisticsIconVariation = data => {
       if (data === 'Pending') return { icon: mdiAccountClockOutline, color: 'warning' };
-      if (data === 'Approved') return { icon: mdiAccountOutline, color: 'success' };
-      if (data === 'Rejected') return { icon: mdiLabelOutline, color: 'error' };
-      if (data === 'Returned') return { icon: mdiCurrencyUsd, color: 'primary' };
-      if (data === 'Consent') return { icon: mdiCurrencyUsd, color: 'info' };
+      if (data === 'Approved') return { icon: mdiCheckDecagramOutline, color: 'success' };
+      if (data === 'Rejected') return { icon: mdiAlertDecagramOutline, color: 'error' };
+      if (data === 'Returned') return { icon: mdiCheckDecagramOutline, color: 'primary' };
+      if (data === 'Consent') return { icon: mdiAccountEditOutline, color: 'info' };
 
-      return { icon: mdiAccountOutline, color: 'success' };
+      return { icon: mdiCheckDecagramOutline, color: 'success' };
     };
 
     return {
@@ -89,11 +88,9 @@ export default {
 
       // icons
       icons: {
-        mdiDotsVertical,
-        mdiTrendingUp,
-        mdiAccountOutline,
-        mdiLabelOutline,
-        mdiCurrencyUsd,
+        mdiTagCheckOutline,
+        mdiAlertDecagramOutline,
+        mdiAccountEditOutline,
       },
     };
   },

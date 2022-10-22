@@ -12,6 +12,7 @@ use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\InventoryController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -48,6 +49,7 @@ Route::get('office-equipments', [OfficeEquipmentController::class, 'index']);
 Route::get('office-equipments/{id}', [OfficeEquipmentController::class, 'show']);
 Route::post('office-equipments', [OfficeEquipmentController::class, 'store']);
 Route::get('office-equipment-maintenance-notification', [OfficeEquipmentController::class, 'regularMaintenanceNotification']);
+Route::put('office-equipments/regular-maintenace/{id}',[OfficeEquipmentController::class, 'regularOfficeEquipmentMaintenance']);
 
 
 Route::get('maintenances', [MaintenanceController::class, 'index']);
@@ -76,3 +78,6 @@ Route::get('/roles',[RoleController::class, 'index']);
 
 Route::post('/account',[AccountController::class, 'store']);
 Route::post('/login',[AccountController::class, 'login']);
+
+Route::get('/inventory', [InventoryController:: class, 'index']);
+Route::post('/inventory', [InventoryController:: class, 'store']);

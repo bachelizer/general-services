@@ -134,5 +134,4 @@ class MaintenanceController extends Controller
         ->get();
         return response()->json($services);
     }
-
 }

@@ -10,19 +10,29 @@
         </v-chip>
       </template>
       <template #item.actions="{item}">
-        <v-btn small color="primary" @click="applyRegularMaintenance(item.id)">Apply action</v-btn>
+        <v-btn small color="primary" @click="applyRegularMaintenance(item)">Apply action</v-btn>
       </template>
-      </v-data-table
-    >
+    </v-data-table>
+    <maintenance-dialog
+      :maintenanceData="maintenanceData"
+      :dialog="dialog"
+      @close="close"
+      @submit="maintenanceSubmit"
+    ></maintenance-dialog>
   </v-card>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
 
+import MaintenanceDialog from './dialogs/MaintenanceDialog.vue';
+
 export default {
+  components: { MaintenanceDialog },
   data() {
     return {
+      maintenanceData: {},
+      dialog: false,
       headers: [
         {
           text: 'Equip Code',
@@ -51,7 +61,10 @@ export default {
     this.onLoad();
   },
   methods: {
-    ...mapActions('equipment', ['officeEquipmentMaintenanceNotification']),
+    ...mapActions('equipment', [
+      'officeEquipmentMaintenanceNotification',
+      'officeEquipmentRegularMaintenance',
+    ]),
     onLoad() {
       this.officeEquipmentMaintenanceNotification();
     },
@@ -64,9 +77,29 @@ export default {
       if (data > 1) return `${data} days`;
       return `${data} days, regular maintenance needed`;
     },
-    applyRegularMaintenance(id) {
-      alert(id)
-    }
+    applyRegularMaintenance(data) {
+      console.log(data);
+      this.maintenanceData = data;
+      this.dialog = true;
+    },
+    close() {
+      this.dialog = false;
+    },
+    async maintenanceSubmit(data) {
+      const payload = {
+        ...data,
+        maintenance_day: data.days_maintenance,
+        action_taken: data.action_taken,
+        maintained_by: data.maintainedBy,
+      };
+      try {
+        await this.officeEquipmentRegularMaintenance(payload);
+        this.onLoad();
+        this.close();
+      } catch (error) {
+        alert(error.message);
+      }
+    },
   },
   computed: {
     ...mapState('equipment', ['officeEquipments']),

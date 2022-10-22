@@ -114,7 +114,7 @@ export default {
       if (status === 'Approved') return 'success';
       if (status === 'Rejected') return 'error';
       if (status === 'Returned') return 'primary';
-      return null;
+      return 'info';
     },
     spliceString(text) {
       return utils.spliceLongString(text, 30);

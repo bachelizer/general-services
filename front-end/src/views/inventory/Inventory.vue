@@ -22,33 +22,37 @@
             </v-btn>
           </v-row>
         </v-col>
-        <!-- <v-data-table :headers="headers" :items="borrows" :search="search">
-            <template v-slot:item.approval_status="{ item }">
+        <v-data-table :headers="headers" :items="inventories" :search="search">
+          <!-- <template v-slot:item.approval_status="{ item }">
               <v-chip small class="ma-2" :color="getStatusColor(item.approval_status)">
                 {{ item.approval_status }}
               </v-chip>
-            </template>
-            <template v-slot:item.borrower="{ item }">
+            </template> -->
+          <!-- <template v-slot:item.borrower="{ item }">
              {{ item.borrower.first_name }} {{ item.borrower.last_name }}
             </template>
             <template v-slot:item.purpose="{ item }">
              {{ spliceString(item.purpose) }}
-            </template>
-            <template v-slot:item.actions="{ item }">
-              <v-btn small @click="view(item)" color="success"> View </v-btn>
-            </template>
-          </v-data-table> -->
+            </template> -->
+          <template v-slot:item.actions="{ item }">
+            <v-btn small color="success"> Replenish </v-btn>
+          </template>
+        </v-data-table>
       </v-card>
     </v-col>
+    <inventory-form :dialog="dialog" @close="closeForm" @submit="handleFormSubmit"></inventory-form>
   </v-row>
 </template>
 <script>
-
 import { mdiPlus } from '@mdi/js';
+
+import { mapActions, mapState } from 'vuex';
+
 import PageTitle from '@/components/PageTitle.vue';
+import InventoryForm from './InventoryForm.vue';
 
 export default {
-  components: { PageTitle },
+  components: { PageTitle, InventoryForm },
   name: 'Inventory',
   data() {
     return {
@@ -61,21 +65,13 @@ export default {
       search: '',
       headers: [
         {
-          text: 'Status',
-          value: 'approval_status',
+          text: 'Name',
+          value: 'inventory_name',
           sortable: true,
         },
-        { text: 'Office of', value: 'office.office' },
-        { text: 'Borrower', value: 'borrower' },
-        { text: 'Equipment', value: 'equipment.code' },
-        {
-          text: 'Qty.',
-          value: 'qty',
-        },
-        {
-          text: 'Purpose',
-          value: 'purpose',
-        },
+        { text: 'Long name', value: 'name' },
+        { text: 'Available stock', value: 'available_stock' },
+        { text: 'Unit', value: 'unit' },
         {
           align: 'center',
           text: 'Actions',
@@ -84,8 +80,21 @@ export default {
       ],
     };
   },
-  created() {},
-  methods: {},
-  computed: {},
+  created() {
+    this.$store.dispatch('inventory/fetchInventory');
+  },
+  methods: {
+    ...mapActions('inventory', ['createInventory']),
+    closeForm() {
+      this.dialog = false;
+    },
+    async handleFormSubmit(payload) {
+      await this.createInventory(payload);
+      this.closeForm();
+    },
+  },
+  computed: {
+    ...mapState('inventory', ['inventories']),
+  },
 };
 </script>

@@ -12,10 +12,13 @@ const creatOfficeEquipment = payload => generalServicesClient.post('/office-equi
 
 const officeEquipmentMaintenanceNotification = () => generalServicesClient.get('/office-equipment-maintenance-notification');
 
+const officeEquipmentRegularMaintenance = (payload, id) => generalServicesClient.put(`office-equipments/regular-maintenace/${id}`, payload);
+
 export default {
   fetchEquipment,
   fetchOfficeEquipment,
   createEquipment,
   creatOfficeEquipment,
   officeEquipmentMaintenanceNotification,
+  officeEquipmentRegularMaintenance,
 };
