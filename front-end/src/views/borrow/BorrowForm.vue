@@ -16,22 +16,40 @@
                   :items="generalServicesEquipments"
                   item-text="code"
                   item-value="id"
-                ></v-autocomplete>
+                  required
+                  :rules="['required']"
+                >
+                  ></v-autocomplete
+                >
               </v-col>
               <v-col cols="4">
-                <v-text-field :readonly="disableField" label="Qty." v-model="data.qty">
+                <v-text-field
+                  :readonly="disableField"
+                  label="Qty."
+                  v-model="data.qty"
+                  required
+                  :rules="['required']"
+                >
                 </v-text-field>
               </v-col>
             </v-row>
             <v-row>
               <v-col>
-                <v-textarea :readonly="disableField" label="Purpose" v-model="data.purpose">
+                <v-textarea
+                  :readonly="disableField"
+                  label="Purpose"
+                  v-model="data.purpose"
+                  required
+                  :rules="['required']"
+                >
                 </v-textarea>
               </v-col>
             </v-row>
             <v-row>
               <v-col v-if="data.approval_status === 'Rejected'">
                 <v-textarea
+                  rules="Required"
+                  required
                   :readonly="disableField"
                   label="Rejection Remarks"
                   v-model="data.rejection_remarks"
@@ -121,7 +139,13 @@ export default {
     this.$store.dispatch('equipment/fetchOfficeEquipment');
   },
   methods: {
-    ...mapActions('borrow', ['postBorrows', 'approveBorrow', 'rejectBorrow', 'returnBorrow', 'printForm']),
+    ...mapActions('borrow', [
+      'postBorrows',
+      'approveBorrow',
+      'rejectBorrow',
+      'returnBorrow',
+      'printForm',
+    ]),
     async handleSubmit() {
       try {
         if (this.action === 'create') {
@@ -180,7 +204,7 @@ export default {
       return this.action !== 'create';
     },
     isAdmin() {
-      return this.userCredential.data.office_id !== 3;
+      return this.userCredential.data.role_id !== 3;
     },
   },
 };

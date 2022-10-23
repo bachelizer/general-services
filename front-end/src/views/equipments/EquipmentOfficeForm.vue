@@ -10,6 +10,7 @@
             <v-row>
               <v-col cols="8">
                 <v-autocomplete
+                  required
                   v-model="data.user_id"
                   label="Custodian"
                   :items="custodian"
@@ -21,6 +22,7 @@
               </v-col>
               <v-col cols="4">
                 <v-autocomplete
+                  required
                   v-model="data.equipment_id"
                   label="Equipment"
                   :items="equipments"
@@ -33,6 +35,7 @@
             <v-row>
               <v-col cols="6">
                 <v-text-field
+                  required
                   v-model="data.code"
                   label="Equipment Code"
                   item-text="code"
@@ -41,6 +44,7 @@
               </v-col>
               <v-col cols="6">
                 <v-text-field
+                  required
                   v-model="data.serial"
                   label="Serial #"
                   item-text="code"
@@ -51,6 +55,7 @@
             <v-row>
               <v-col cols="4">
                 <v-text-field
+                  required
                   v-model="data.amount"
                   label="Amount"
                   item-text="code"

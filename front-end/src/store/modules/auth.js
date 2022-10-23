@@ -22,7 +22,11 @@ export default {
         const { data } = await auth.login(payload);
         // console.log(payload)
         commit('SET_USER_CREDENTIAL', data);
-        window.location.assign('/dashboard');
+        if (data.data.role_id !== 3) {
+          window.location.assign('/dashboard');
+        } else {
+          window.location.assign('/service');
+        }
       } catch (error) {
         throw error;
       }

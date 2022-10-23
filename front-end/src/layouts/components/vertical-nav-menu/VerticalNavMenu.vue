@@ -31,7 +31,7 @@
     <!-- Navigation Items -->
     <v-list expand shaped class="vertical-nav-menu-items pr-5">
       <nav-menu-link
-        title="Dashboard"
+        title="Dashboard" v-if="isAdmin"
         :to="{ name: 'dashboard' }"
         :icon="icons.mdiHomeOutline"
       ></nav-menu-link>
@@ -120,7 +120,7 @@ export default {
   computed: {
     ...mapState('auth', ['userCredential']),
     isAdmin() {
-      return this.userCredential.data.office_id !== 3;
+      return this.userCredential.data.role_id !== 3;
     },
   },
 };
