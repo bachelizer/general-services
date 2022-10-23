@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Models\Inventory;
 
+use DB;
+
 class InventoryController extends Controller
 {
     //
@@ -39,11 +41,12 @@ class InventoryController extends Controller
 
     public function replenish(Request $request, $id)
     {
-        $inventory = Inventory::find($id);
+        DB::update("update inventory set base_stock = available_stock + ?, available_stock = available_stock + ? where id = ?;", [$request->get('available_stock'), $request->get('available_stock'), $id]);
+        // $inventory = Inventory::find($id);
         
-        $inventory->available_stock = $request->get('base_stock');
-        $inventory->base_stock = $request->get('base_stock');
-        $inventory->save();
+        // $inventory->available_stock = $request->get('base_stock');
+        // $inventory->base_stock = $request->get('base_stock');
+        // $inventory->save();
         
         return response()->json([
             'status' => true,
@@ -53,10 +56,12 @@ class InventoryController extends Controller
 
     public function despense(Request $request, $id)
     {
-        $inventory = Inventory::find($id);
+        DB::update("update inventory set available_stock = available_stock - ? where id = ?;", [$request->get('use_stock'), $id]);
+
+        // $inventory = Inventory::find($id);
         
-        $inventory->available_stock = $request->get('request_stock');
-        $inventory->save();
+        // $inventory->available_stock = $request->get('request_stock');
+        // $inventory->save();
         
         return response()->json([
             'status' => true,

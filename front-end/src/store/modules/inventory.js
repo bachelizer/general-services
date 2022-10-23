@@ -31,5 +31,20 @@ export default {
         throw error;
       }
     },
+
+    async replenishInventory({ commit }, [payload, id]) {
+      try {
+        await inventory.replenishInventory(payload, id);
+      } catch (error) {
+        throw error;
+      }
+    },
+    async despenseInventory({commit}, [payload, id]) {
+      try {
+        await inventory.despenseInventory(payload, id);
+      } catch (error) {
+        throw error;
+      }
+    }
   },
 };

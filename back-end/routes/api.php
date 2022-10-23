@@ -81,3 +81,5 @@ Route::post('/login',[AccountController::class, 'login']);
 
 Route::get('/inventory', [InventoryController:: class, 'index']);
 Route::post('/inventory', [InventoryController:: class, 'store']);
+Route::put('/inventory/replenish/{id}', [InventoryController:: class, 'replenish']); 
+Route::put('/inventory/despense/{id}', [InventoryController:: class, 'despense']);
