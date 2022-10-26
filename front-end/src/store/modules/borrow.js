@@ -16,6 +16,9 @@ export default {
     statisticsBorrow: [],
   },
   mutations: {
+    SET_CONSENT_BORROWS(state, array) {
+      state.borrows = array;
+    },
     SET_REPORT_DATA(state, array) {
       state.reportData = array;
     },
@@ -36,6 +39,15 @@ export default {
         throw error;
       }
     },
+    async fetchConsentBorrows({ commit }) {
+      try {
+        const { data } = await borrow.fetchBorrows();
+        const array = await utils.filterConsentBorrowa(data);
+        commit('SET_CONSENT_BORROWS', array);
+      } catch (error) {
+        throw error;
+      }
+    },
     async postBorrows({ commit }, data) {
       const payload = {
         request_by_id: this.state.auth.userCredential.data.user_id,
@@ -48,21 +60,28 @@ export default {
         throw e;
       }
     },
-    async approveBorrow({ coomit }, [payload, id]) {
+    async approveBorrow({ commit }, [payload, id]) {
       try {
         await borrow.approveBorrow([payload, id]);
       } catch (e) {
         throw e;
       }
     },
-    async rejectBorrow({ coomit }, [payload, id]) {
+    async consentBorrow({ commit }, [payload, id]) {
+      try {
+        await borrow.consentBorrow([payload, id]);
+      } catch (e) {
+        throw e;
+      }
+    },
+    async rejectBorrow({ commit }, [payload, id]) {
       try {
         await borrow.rejectBorrow([payload, id]);
       } catch (e) {
         throw e;
       }
     },
-    async returnBorrow({ coomit }, id) {
+    async returnBorrow({ commit }, id) {
       try {
         await borrow.returnBorrow(id);
       } catch (e) {

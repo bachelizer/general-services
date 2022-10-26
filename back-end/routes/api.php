@@ -68,6 +68,7 @@ Route::get('/services',[ServiceTypeController::class, 'index']);
 Route::get('/borrows',[BorrowController::class, 'index']);
 Route::post('/borrows',[BorrowController::class, 'store']);
 Route::put('/borrows/approve/{id}',[BorrowController::class, 'approve']);
+Route::put('/borrows/consent/{id}',[BorrowController::class, 'consent']);
 Route::put('/borrows/reject/{id}',[BorrowController::class, 'reject']);
 Route::put('/borrows/return/{id}',[BorrowController::class, 'return']);
 Route::get('/borrows/report/{startDate}/{endDate}',[BorrowController::class, 'report']);

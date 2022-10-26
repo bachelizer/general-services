@@ -22,7 +22,7 @@
         ></v-img>
         <v-slide-x-transition>
           <h2 class="app-title text--primary">
-            G-S-S
+            GSMS
           </h2>
         </v-slide-x-transition>
       </router-link>
@@ -31,9 +31,16 @@
     <!-- Navigation Items -->
     <v-list expand shaped class="vertical-nav-menu-items pr-5">
       <nav-menu-link
-        title="Dashboard" v-if="isAdmin"
+        title="Dashboard"
+        v-if="isAdmin"
         :to="{ name: 'dashboard' }"
         :icon="icons.mdiHomeOutline"
+      ></nav-menu-link>
+      <nav-menu-link
+        v-if="isAdmin && userCredential.data.office_id === 3"
+        title="Borrow Requests"
+        :to="{ name: 'borrow-request' }"
+        :icon="icons.mdiCheckAll"
       ></nav-menu-link>
       <nav-menu-link
         title="Service"
@@ -45,6 +52,7 @@
         :to="{ name: 'borrow' }"
         :icon="icons.mdiSwapHorizontal"
       ></nav-menu-link>
+
       <div v-if="isAdmin">
         <nav-menu-section-title title="USER INTERFACE"></nav-menu-section-title>
         <nav-menu-group title="Reports" :icon="icons.mdiFileOutline">
@@ -58,10 +66,10 @@
           <nav-menu-link title="Offices" :to="{ name: 'office' }"></nav-menu-link>
         </nav-menu-group>
         <nav-menu-link
-        title="Inventory"
-        :to="{ name: 'inventory' }"
-        :icon="icons.mdiFormatPaint "
-      ></nav-menu-link>
+          title="Inventory"
+          :to="{ name: 'inventory' }"
+          :icon="icons.mdiFormatPaint"
+        ></nav-menu-link>
       </div>
     </v-list>
   </v-navigation-drawer>
@@ -82,7 +90,8 @@ import {
   mdiAccountCogOutline,
   mdiCogs,
   mdiSwapHorizontal,
-  mdiFormatPaint 
+  mdiFormatPaint,
+  mdiCheckAll,
 } from '@mdi/js';
 import NavMenuSectionTitle from './components/NavMenuSectionTitle.vue';
 import NavMenuGroup from './components/NavMenuGroup.vue';
@@ -114,6 +123,7 @@ export default {
         mdiAccountCogOutline,
         mdiSwapHorizontal,
         mdiFormatPaint,
+        mdiCheckAll,
       },
     };
   },

@@ -94,6 +94,12 @@ const routes = [
     component: () => import('@/views/inventory/Inventory.vue'),
   },
   {
+    path: '/borrow-request',
+    name: 'borrow-request',
+    meta: { requiresAuth: true },
+    component: () => import('@/views/borrow-request/BorrowRequest.vue'),
+  },
+  {
     path: '*',
     redirect: 'error-404',
   },

@@ -16,7 +16,7 @@
             </v-col>
             <v-spacer></v-spacer>
             <v-btn elevation="2" small class="mr-10 mt-2" fab color="primary">
-              <v-icon @click="(dialog = true), (borrow = {}), (action = 'create')">
+              <v-icon @click="(dialog = true), (borrow = {}), (action = 'consent')">
                 <!-- <v-icon> -->
                 {{ icons.mdiPlus }}
               </v-icon>
@@ -30,10 +30,10 @@
             </v-chip>
           </template>
           <template v-slot:item.borrower="{ item }">
-           {{ item.borrower.first_name }} {{ item.borrower.last_name }}
+            {{ item.borrower.first_name }} {{ item.borrower.last_name }}
           </template>
           <template v-slot:item.purpose="{ item }">
-           {{ spliceString(item.purpose) }}
+            {{ spliceString(item.purpose) }}
           </template>
           <template v-slot:item.actions="{ item }">
             <v-btn small @click="view(item)" color="success"> View </v-btn>
@@ -56,13 +56,12 @@ import { mapState, mapActions } from 'vuex';
 
 import { mdiPlus } from '@mdi/js';
 import PageTitle from '@/components/PageTitle.vue';
-import BorrowForm from './BorrowForm.vue';
+import BorrowForm from '../borrow/BorrowForm.vue';
 
 import utils from '../../helper/utils/utils';
 
 export default {
   components: { PageTitle, BorrowForm },
-  name: 'Borrow',
   data() {
     return {
       dialog: false,
@@ -102,13 +101,14 @@ export default {
     this.onload();
   },
   methods: {
-    ...mapActions('borrow', ['fetchBorrows']),
+    ...mapActions('borrow', ['fetchConsentBorrows']),
     onload() {
-      this.fetchBorrows();
+      this.fetchConsentBorrows();
     },
     view(data) {
       this.borrow = data;
       this.dialog = true;
+      this.action = 'consent';
     },
     getStatusColor(status) {
       if (status === 'Pending') return 'warning';
