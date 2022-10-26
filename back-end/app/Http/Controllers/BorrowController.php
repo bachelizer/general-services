@@ -59,6 +59,20 @@ class BorrowController extends Controller
         ], 200);
     }
 
+    public function consent(Request $request, $id)
+    {
+        $borrows = Borrow::find($id);
+        
+        $borrows->approval_status = 'Consent';
+        $borrows->approver_id = $request->get('approver_id');// $request->get('approver_id'); this should take the approver id
+        $borrows->save();
+        
+        return response()->json([
+            'status' => true,
+            'message' => "Successfully Updated Approval",
+        ], 200);
+    }
+
     public function reject(Request $request, $id)
     {
         $borrows = Borrow::find($id);

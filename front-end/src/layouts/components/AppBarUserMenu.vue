@@ -22,9 +22,9 @@
         </div>
       </div>
 
-      <v-divider></v-divider>
+      <!-- <v-divider></v-divider> -->
 
-      <!-- Profile -->
+      <!-- Profile
       <v-list-item link>
         <v-list-item-icon class="me-2">
           <v-icon size="22">
@@ -35,8 +35,9 @@
           <v-list-item-title>Profile</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+    -->
 
-      <!-- Email -->
+      <!-- Email 
       <v-list-item link>
         <v-list-item-icon class="me-2">
           <v-icon size="22">
@@ -47,8 +48,9 @@
           <v-list-item-title>Inbox</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+      -->
 
-      <!-- Chat -->
+      <!-- Chat 
       <v-list-item link>
         <v-list-item-icon class="me-2">
           <v-icon size="22">
@@ -65,8 +67,9 @@
       </v-list-item>
 
       <v-divider class="my-2"></v-divider>
+      -->
 
-      <!-- Settings -->
+      <!-- Settings 
       <v-list-item link>
         <v-list-item-icon class="me-2">
           <v-icon size="22">
@@ -77,8 +80,9 @@
           <v-list-item-title>Settings</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+    -->
 
-      <!-- Pricing -->
+      <!-- Pricing 
       <v-list-item link>
         <v-list-item-icon class="me-2">
           <v-icon size="22">
@@ -89,8 +93,9 @@
           <v-list-item-title>Pricing</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+      -->
 
-      <!-- FAQ -->
+      <!-- FAQ 
       <v-list-item link>
         <v-list-item-icon class="me-2">
           <v-icon size="22">
@@ -101,6 +106,7 @@
           <v-list-item-title>FAQ</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+      -->
 
       <v-divider class="my-2"></v-divider>
 

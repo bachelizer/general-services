@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent max-width="600px" transition="dialog-top-transition">
       <v-card>
-        <v-form @submit.prevent="handleSubmit">
+        <v-form ref="form" @submit.prevent="handleSubmit">
           <v-card-title>
             <span class="text-h5">Borrow Request Form</span>
           </v-card-title>
@@ -16,22 +16,40 @@
                   :items="generalServicesEquipments"
                   item-text="code"
                   item-value="id"
-                ></v-autocomplete>
+                  required
+                  :rules="required"
+                >
+                  ></v-autocomplete
+                >
               </v-col>
               <v-col cols="4">
-                <v-text-field :readonly="disableField" label="Qty." v-model="data.qty">
+                <v-text-field
+                  :readonly="disableField"
+                  label="Qty."
+                  v-model.number="data.qty"
+                  required
+                  :rules="validateNumber"
+                >
                 </v-text-field>
               </v-col>
             </v-row>
             <v-row>
               <v-col>
-                <v-textarea :readonly="disableField" label="Purpose" v-model="data.purpose">
+                <v-textarea
+                  :readonly="disableField"
+                  label="Purpose"
+                  v-model="data.purpose"
+                  required
+                  :rules="required"
+                >
                 </v-textarea>
               </v-col>
             </v-row>
             <v-row>
               <v-col v-if="data.approval_status === 'Rejected'">
                 <v-textarea
+                  rules="Required"
+                  required
                   :readonly="disableField"
                   label="Rejection Remarks"
                   v-model="data.rejection_remarks"
@@ -42,7 +60,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn type="reset" color="default darken-1" text @click="$emit('close')">
+            <v-btn type="reset" color="default darken-1" text @click="close">
               Close
             </v-btn>
             <v-btn v-if="action === 'create'" color="primary darken-1" text type="submit">
@@ -52,10 +70,18 @@
               <v-btn @click="rejectDialog" color="error darken-1" text>
                 Reject
               </v-btn>
-              <v-btn @click="approve" color="success darken-1" text>
-                Approve
+              <v-btn @click="consent" color="success darken-1" text>
+                forward to OP
               </v-btn>
             </div>
+            <v-btn
+              v-if="isOP && action === 'consent'"
+              @click="approve"
+              color="success darken-1"
+              text
+            >
+              Approve
+            </v-btn>
             <v-btn
               v-if="
                 data.approval_status === 'Rejected' ||
@@ -115,21 +141,46 @@ export default {
   data() {
     return {
       rejectionDialog: false,
+      required: [
+        v => !!v || 'this field is required',
+        // v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+      ],
+      validateNumber: [
+        v => !!v || 'this field is required',
+        v => /[0-9]/.test(v) || 'Quantity must be number',
+      ],
     };
   },
+  mounted() {},
   created() {
     this.$store.dispatch('equipment/fetchOfficeEquipment');
   },
   methods: {
-    ...mapActions('borrow', ['postBorrows', 'approveBorrow', 'rejectBorrow', 'returnBorrow', 'printForm']),
+    ...mapActions('borrow', [
+      'postBorrows',
+      'approveBorrow',
+      'consentBorrow',
+      'rejectBorrow',
+      'returnBorrow',
+      'printForm',
+    ]),
+    reload() {
+      this.$emit('reload');
+    },
+    async close() {
+      this.$refs.form.resetValidation();
+      this.$emit('close');
+    },
     async handleSubmit() {
+      this.$refs.form.validate();
       try {
         if (this.action === 'create') {
           await this.postBorrows(this.data);
+          this.reload();
         } else {
           this.printForm(this.data);
         }
-        this.$emit('close');
+        this.close();
       } catch (error) {
         alert(error);
       }
@@ -141,10 +192,24 @@ export default {
       try {
         const payload = {
           rejection_remarks: remarks,
-          approver_id: 2, // take the user_id from the state
+          approver_id: this.userCredential.data.user_id, // take the user_id from the state
         };
         await this.rejectBorrow([payload, this.data.id]);
         this.rejectionDialog = false;
+        this.reload();
+        this.$emit('close');
+      } catch (e) {
+        alert(e.message);
+      }
+    },
+    // forward to OP
+    async consent() {
+      try {
+        const payload = {
+          approver_id: this.userCredential.data.user_id, // take the user_id from the state
+        };
+        await this.consentBorrow([payload, this.data.id]);
+        this.reload();
         this.$emit('close');
       } catch (e) {
         alert(e.message);
@@ -153,9 +218,10 @@ export default {
     async approve() {
       try {
         const payload = {
-          approver_id: 2, // take the user_id from the state
+          approver_id: this.userCredential.data.user_id, // take the user_id from the state
         };
         await this.approveBorrow([payload, this.data.id]);
+        this.reload();
         this.$emit('close');
       } catch (e) {
         alert(e.message);
@@ -164,6 +230,7 @@ export default {
     async returned() {
       try {
         await this.returnBorrow(this.data.id);
+        this.reload();
         this.$emit('close');
       } catch (e) {
         alert(e.message);
@@ -180,7 +247,10 @@ export default {
       return this.action !== 'create';
     },
     isAdmin() {
-      return this.userCredential.data.office_id !== 3;
+      return this.userCredential.data.role_id !== 3;
+    },
+    isOP() {
+      return this.userCredential.data.office_id === 3 && this.userCredential.data.role_id !== 3;
     },
   },
 };

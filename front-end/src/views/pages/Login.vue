@@ -31,9 +31,8 @@
         </v-card-text>
 
         <!-- login form -->
-        <v-form @submit.prevent="handleSubmit">
           <v-card-text>
-            <v-form>
+            <v-form @submit.prevent="handleSubmit">
               <v-text-field
                 v-model="payload.username"
                 outlined
@@ -71,12 +70,14 @@
               </a>
             </div> -->
 
-              <v-btn @click="handleSubmit" block color="primary" class="mt-6">
+              <v-btn type="submit" block color="primary" class="mt-6">
                 Login
               </v-btn>
+              <v-alert v-if="invalid" dense outlined type="error" class="mt-2">
+                Invalid username or password..
+              </v-alert>
             </v-form>
           </v-card-text>
-        </v-form>
       </v-card>
     </div>
 
@@ -159,12 +160,17 @@ export default {
         username: '',
         password: '',
       },
+      invalid: false,
     };
   },
   methods: {
     ...mapActions('auth', ['login']),
-    handleSubmit() {
-      this.login(this.payload);
+    async handleSubmit() {
+      try {
+        await this.login(this.payload);
+      } catch (error) {
+        this.invalid = true;
+      }
     },
   },
 };
