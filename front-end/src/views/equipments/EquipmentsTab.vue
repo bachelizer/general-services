@@ -32,6 +32,7 @@
     <equipment-form
       :dialog="equipmentFormDialog"
       @close="equipmentFormDialog = false"
+      @reload="onLoad"
     ></equipment-form>
   </v-row>
 </template>

@@ -35,6 +35,7 @@
         :dialog="dialog"
         :action="action"
         @close="dialog = false, action = ''"
+        @reload="onload"
       ></users-form>
     </v-col>
   </v-row>

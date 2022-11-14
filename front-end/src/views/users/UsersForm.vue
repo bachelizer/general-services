@@ -30,11 +30,16 @@
             </v-row>
             <v-row>
               <v-col cols="4">
-                <v-text-field :rules="requiredRules" required v-model="data.designation" label="Designation"></v-text-field>
+                <v-text-field
+                  :rules="requiredRules"
+                  required
+                  v-model="data.designation"
+                  label="Designation"
+                ></v-text-field>
               </v-col>
               <v-col cols="4">
                 <v-select
-                :rules="requiredRules"
+                  :rules="requiredRules"
                   v-model="data.role_id"
                   label="Role"
                   :items="roles"
@@ -46,19 +51,24 @@
             <v-row>
               <v-col col>
                 <v-text-field
-                required
+                  required
                   :rules="requiredRules"
                   v-model="data.last_name"
                   label="Last Name"
                 ></v-text-field>
               </v-col>
               <v-col col>
-                <v-text-field  :rules="requiredRules" required v-model="data.first_name" label="First Name"></v-text-field>
+                <v-text-field
+                  :rules="requiredRules"
+                  required
+                  v-model="data.first_name"
+                  label="First Name"
+                ></v-text-field>
               </v-col>
               <v-col col>
                 <v-text-field
-                required
-                :rules="requiredRules"
+                  required
+                  :rules="requiredRules"
                   v-model="data.middle_name"
                   label="Middle Name"
                 ></v-text-field>
@@ -70,8 +80,8 @@
             <v-row>
               <v-col cols="8">
                 <v-autocomplete
-                required
-                :rules="requiredRules"
+                  required
+                  :rules="requiredRules"
                   v-model="data.office_id"
                   :items="offices"
                   item-value="id"
@@ -86,7 +96,13 @@
             <v-btn type="reset" color="default darken-1" text @click="$emit('close')">
               Close
             </v-btn>
-            <v-btn :disabled="!valid" v-if="action === 'create'" color="primary darken-1" text type="submit">
+            <v-btn
+              :disabled="!valid"
+              v-if="action === 'create'"
+              color="primary darken-1"
+              text
+              type="submit"
+            >
               Create
             </v-btn>
             <v-btn v-if="action !== 'create'" color="primary darken-1" text @click="update">
@@ -144,6 +160,7 @@ export default {
       if (this.action === 'create') {
         await this.createUsers(this.data);
       }
+      this.$emit('reload');
       this.dialog = false;
     },
     async storeAccount(data) {
