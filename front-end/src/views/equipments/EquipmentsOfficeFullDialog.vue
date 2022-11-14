@@ -6,10 +6,10 @@
           <v-icon @click="$emit('close')">
             {{ icons.mdiClose }}
           </v-icon>
-          <v-toolbar-title>Settings</v-toolbar-title>
+          <!-- <v-toolbar-title>Settings</v-toolbar-title> -->
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn class="mt-3" @click="dialog = false">Save</v-btn>
+            <v-btn class="mt-3" @click="dialog = false">Close</v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-row justify="center" class="mt-10">
@@ -50,6 +50,7 @@
       :dialog="officeFormDialog"
       :data="formData"
       @close="officeFormDialog = false"
+      @reload="this.$emit('reload')"
     ></equipment-office-form>
   </v-layout>
 </template>

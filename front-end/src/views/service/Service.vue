@@ -38,7 +38,7 @@
         </v-data-table>
       </v-card>
     </v-col>
-    <ServiceForm :action="action" :status="status" :dialog="dialog" :data="data" @close="close" />
+    <ServiceForm :action="action" :status="status" :dialog="dialog" :data="data" @close="close" @reload="onLoad"/>
   </v-row>
 </template>
 <script>

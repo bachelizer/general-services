@@ -35,6 +35,7 @@
         :equipments="equipments"
         :dialog="fullDialog"
         @close="fullDialog = false"
+        @reload="onLoad"
       ></equipments-office-full-dialog>
     </v-col>
   </v-row>

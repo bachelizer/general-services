@@ -180,7 +180,6 @@
                       :disabled="disableFulfilled || disableServed"
                       v-model="tickThirdParty"
                       label="3rd party service"
-                      @click="loadSources"
                     ></v-checkbox>
                   </v-col>
                   <v-col cols="12">
@@ -339,6 +338,7 @@ export default {
           this.servicePDF(this.data.id);
         }
         this.$emit('close');
+        this.$emit('reload');
       } catch (error) {
         alert(error);
       }

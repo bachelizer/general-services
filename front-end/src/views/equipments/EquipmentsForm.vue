@@ -94,6 +94,7 @@ export default {
       await this.$store.dispatch('equipment/createEquipment', payload);
       this.clear();
       this.$emit('close');
+      this.$emit('reload');
     },
   },
   computed: {},

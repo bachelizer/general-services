@@ -67,6 +67,7 @@ export default {
         office,
       };
       await this.createOffice(obj);
+      this.$store.dispatch('office/fetchOffice');
       this.officeDialog = false;
     },
   },

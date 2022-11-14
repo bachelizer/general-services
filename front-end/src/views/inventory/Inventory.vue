@@ -133,6 +133,7 @@ export default {
     },
     async handleFormSubmit(payload) {
       await this.createInventory(payload);
+      this.$store.dispatch('inventory/fetchInventory');
       this.closeForm();
     },
     async handleReplenishSubmit(payload) {
