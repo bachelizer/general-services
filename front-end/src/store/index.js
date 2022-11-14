@@ -12,6 +12,7 @@ import role from '@/store/modules/role';
 import account from '@/store/modules/account';
 import auth from '@/store/modules/auth';
 import inventory from '@/store/modules/inventory';
+import outsource from '@/store/modules/outsource'
 
 Vue.use(Vuex);
 
@@ -34,6 +35,7 @@ export default new Vuex.Store({
     role,
     account,
     auth,
-    inventory
+    inventory,
+    outsource,
   },
 });

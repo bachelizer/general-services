@@ -64,6 +64,7 @@
           <nav-menu-link title="Users" :to="{ name: 'users' }"> </nav-menu-link>
           <nav-menu-link title="Equipments" :to="{ name: 'equipment' }"></nav-menu-link>
           <nav-menu-link title="Offices" :to="{ name: 'office' }"></nav-menu-link>
+          <nav-menu-link title="3rd Party Services" :to="{ name: 'third-parties' }"></nav-menu-link>
         </nav-menu-group>
         <nav-menu-link
           title="Inventory"

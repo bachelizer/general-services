@@ -17,13 +17,13 @@ class MaintenanceController extends Controller
     //
     public function index()
     {
-        $maintenances = Maintenance::with('request_by', 'served_by', 'office', 'equipment', 'service')->orderBy('id', 'desc')->get();
+        $maintenances = Maintenance::with('request_by', 'served_by', 'office', 'equipment', 'service', 'served_by_3rd_party')->orderBy('id', 'desc')->get();
         return response()->json($maintenances);
     }
 
     public function show($id)
     {
-        $maintenances = Maintenance::with('request_by', 'served_by', 'office', 'equipment', 'service')->where('id', $id)->get();
+        $maintenances = Maintenance::with('request_by', 'served_by', 'office', 'equipment', 'service', 'served_by_3rd_party')->where('id', $id)->get();
         return response()->json($maintenances);
     }
 
@@ -82,6 +82,7 @@ class MaintenanceController extends Controller
         
         $maintenance->request_status = 'Served';
         $maintenance->serve_by_id =  $request->get('serve_by_id');
+        $maintenance->serve_by_3rd_id =  $request->get('serve_by_3rd_id');
         $maintenance->time_start =  $request->get('time_start');
         $maintenance->time_end =  $request->get('time_end');
         $maintenance->action_taken =  $request->get('action_taken');
@@ -121,7 +122,7 @@ class MaintenanceController extends Controller
     public function generatePDF(BorrowRequest $request)
     {
         $id = $request->get('id');
-        $maintenance = Maintenance::with('request_by', 'served_by', 'office', 'equipment', 'service')->find($id);
+        $maintenance = Maintenance::with('request_by', 'served_by', 'office', 'equipment', 'service', 'served_by_3rd_party')->find($id);
         $pdf = PDF::loadView('service-form',  $maintenance->toArray());
         return $pdf->download('gen-services-service.pdf');
     }

@@ -13,6 +13,7 @@ use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\OutsourcesController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -84,3 +85,8 @@ Route::get('/inventory', [InventoryController:: class, 'index']);
 Route::post('/inventory', [InventoryController:: class, 'store']);
 Route::put('/inventory/replenish/{id}', [InventoryController:: class, 'replenish']); 
 Route::put('/inventory/despense/{id}', [InventoryController:: class, 'despense']);
+
+Route::get('/outsource', [OutsourcesController:: class, 'index']);
+Route::get('/outsource/{id}', [OutsourcesController:: class, 'show']);
+Route::post('/outsource', [OutsourcesController:: class, 'store']);
+Route::put('/outsource/{id}', [OutsourcesController:: class, 'update']);

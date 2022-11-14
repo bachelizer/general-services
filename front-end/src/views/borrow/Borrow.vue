@@ -30,10 +30,10 @@
             </v-chip>
           </template>
           <template v-slot:item.borrower="{ item }">
-           {{ item.borrower.first_name }} {{ item.borrower.last_name }}
+            {{ item.borrower.first_name }} {{ item.borrower.last_name }}
           </template>
           <template v-slot:item.purpose="{ item }">
-           {{ spliceString(item.purpose) }}
+            {{ spliceString(item.purpose) }}
           </template>
           <template v-slot:item.actions="{ item }">
             <v-btn small @click="view(item)" color="success"> View </v-btn>

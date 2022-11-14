@@ -100,6 +100,12 @@ const routes = [
     component: () => import('@/views/borrow-request/BorrowRequest.vue'),
   },
   {
+    path: '/third-parties',
+    name: 'third-parties',
+    meta: { requiresAuth: true },
+    component: () => import('@/views/third-party/ThirdParty.vue'),
+  },
+  {
     path: '*',
     redirect: 'error-404',
   },

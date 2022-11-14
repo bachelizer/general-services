@@ -163,12 +163,35 @@
                   </v-col>
                   <v-col col>
                     <v-select
+                      v-if="!tickThirdParty"
                       :readonly="disableFulfilled || disableServed"
                       v-model="data.serve_by_id"
                       :items="maintener"
                       :item-text="x => `${x.last_name}, ${x.first_name}`"
                       item-value="id"
                       label="Served by"
+                      required
+                    ></v-select>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12">
+                    <v-checkbox
+                      :disabled="disableFulfilled || disableServed"
+                      v-model="tickThirdParty"
+                      label="3rd party service"
+                      @click="loadSources"
+                    ></v-checkbox>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-select
+                      v-if="tickThirdParty || data.serve_by_3rd_id"
+                      :readonly="disableFulfilled || disableServed"
+                      v-model="data.serve_by_3rd_id"
+                      :items="outSources"
+                      item-text="institution_name"
+                      item-value="id"
+                      label="Served by establisment"
                       required
                     ></v-select>
                   </v-col>
@@ -222,7 +245,12 @@
               Submit Request
             </v-btn>
             <div v-if="isAdmin">
-              <v-btn v-if="disablePending" color="primary darken-1" text type="submit">
+              <v-btn
+                v-if="disablePending && isGeneralServices"
+                color="primary darken-1"
+                text
+                type="submit"
+              >
                 Serve
               </v-btn>
               <v-btn v-if="disableServed" color="primary darken-1" text type="submit">
@@ -268,6 +296,7 @@ export default {
       timeStartMenu: false,
       timeEndMenu: false,
       dateMenu: false,
+      tickThirdParty: false,
     };
   },
   created() {
@@ -284,11 +313,13 @@ export default {
       'servicePDF',
     ]),
     ...mapActions('user', ['fetchUsers']),
+    ...mapActions('outsource', ['fetchOutSources']),
     onLoad() {
       this.fetchOffice();
       this.fetchOfficeEquipment();
       this.fetchServices();
       this.fetchUsers();
+      this.fetchOutSources();
     },
     async handleSubmit() {
       try {
@@ -312,6 +343,9 @@ export default {
         alert(error);
       }
     },
+    // async loadSources() {
+    //   this.fetchOutSources();
+    // },
   },
   computed: {
     ...mapState('office', ['offices']),
@@ -319,6 +353,7 @@ export default {
     ...mapState('service', ['services']),
     ...mapState('user', ['users']),
     ...mapState('auth', ['userCredential']),
+    ...mapState('outsource', ['outSources']),
     requestedBy() {
       if (this.action === 'create') return '';
       else if (this.data.request_by != null) {
@@ -346,7 +381,10 @@ export default {
       return this.users.filter(x => x.office.id === 1);
     },
     isAdmin() {
-      return this.userCredential.data.office_id !== 3;
+      return this.userCredential.data.role_id !== 3;
+    },
+    isGeneralServices() {
+      return this.userCredential.data.office_id === 1;
     },
   },
 };

@@ -122,7 +122,11 @@
                             </td>
                             <td>
                                 Served by:
-                                <h4 class="mt-10">{{ $served_by['first_name'] }} {{ $served_by['last_name'] }}</h4>
+                                <?php if($served_by_3rd_party != null) { ?>
+                                    <h4 class="mt-10">{{ $served_by_3rd_party['institution_name'] }}</h4>
+                                 <?php } else { ?>
+                                    <h4 class="mt-10">{{ $served_by['first_name'] }} {{ $served_by['last_name'] }}</h4>
+                                <?php } ?>
                             </td>
                         </tr>
                     </table>
