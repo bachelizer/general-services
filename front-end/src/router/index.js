@@ -58,6 +58,12 @@ const routes = [
     component: () => import('@/views/borrow/Borrow.vue'),
   },
   {
+    path: '/borrow-approval',
+    name: 'borrow-approval',
+    meta: { requiresAuth: true },
+    component: () => import('@/views/borrow-approval/BorrowApproval.vue'),
+  },
+  {
     path: '/office',
     name: 'office',
     meta: { requiresAuth: true },

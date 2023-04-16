@@ -68,5 +68,11 @@ class OfficeEquipmentController extends Controller
         ], 200);
     }
 
+    public function fetchUserEquipment($userId)
+    {
+        $equipments = OfficeEquipment::where('user_id', '=', $userId)->get();
+        return $equipments;
+    }
+
 
 }

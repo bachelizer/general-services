@@ -29,16 +29,19 @@ class BorrowController extends Controller
     public function store(Request $request)
     {
         $borrows = new Borrow([
-            'borrower_id' => $request->get('request_by_id'),
+            'borrower_id' => $request->get('borrower_id'),
             'office_id' => $request->get('office_id'),
             'equipment_id' => $request->get('equipment_id'),
             'qty' => $request->get('qty'),
             'purpose' => $request->get('purpose'),
             'date_borrowed' => now()->toDateString(),
+            'promise_return_date' => $request->get('promise_return_date'),
+            'mr_id' => $request->get('mr_id'),
+            'borrower_office_id' => $request->get('borrower_office_id'),
             'approval_status' => "Pending"
         ]);
         $borrows->save();
-        
+
         return response()->json([
             'status' => true,
             'message' => "Successfully Added",
@@ -48,7 +51,7 @@ class BorrowController extends Controller
     public function approve(Request $request, $id)
     {
         $borrows = Borrow::find($id);
-        
+
         $borrows->approval_status = 'Approved';
         $borrows->approver_id = $request->get('approver_id');// $request->get('approver_id'); this should take the approver id
         $borrows->save();
@@ -59,11 +62,11 @@ class BorrowController extends Controller
         ], 200);
     }
 
-    public function consent(Request $request, $id)
+    public function forward(Request $request, $id)
     {
         $borrows = Borrow::find($id);
         
-        $borrows->approval_status = 'Consent';
+        $borrows->approval_status = 'Forwarded';
         $borrows->approver_id = $request->get('approver_id');// $request->get('approver_id'); this should take the approver id
         $borrows->save();
         
@@ -91,31 +94,24 @@ class BorrowController extends Controller
     public function return(Request $request, $id)
     {
         $borrows = Borrow::find($id);
-        
+
         $borrows->approval_status = 'Returned';
         $borrows->date_returned = now()->toDateString();// $request->get('approver_id'); this should take the approver id
         $borrows->save();
-        
+
         return response()->json([
             'status' => true,
             'message' => "Borrow returned",
         ], 200);
     }
 
-    public function report($startDate, $endDate)
-    {
-        $borrows = Borrow::with('borrower', 'approver', 'office', 'equipment')
-            ->whereDate('created_at', '>=', $startDate)
-            ->whereDate('created_at', '<=', $endDate)
-            ->orderBy('id', 'desc')->get();
-        return response()->json($borrows);
-    }
+   
 
     public function generatePDF(BorrowRequest $request)
     {
         $id = $request->get('id');
         $borrows = Borrow::with('borrower', 'approver', 'office', 'equipment')->find($id);
-        $pdf = PDF::loadView('borrowForm',  $borrows->toArray());
+        $pdf = PDF::loadView('borrow-report/borrowForm',  $borrows->toArray());
         return $pdf->download('gen-services-borrow.pdf');
     }
 
@@ -127,5 +123,26 @@ class BorrowController extends Controller
         ->get();
         return response()->json($borrows);
     }
-   
+
+     public function report($startDate, $endDate)
+     {
+        $borrows = Borrow::with('borrower', 'approver', 'office', 'equipment')
+            ->whereDate('created_at', '>=', $startDate)
+            ->whereDate('created_at', '<=', $endDate)
+            ->orderBy('id', 'desc')->get();
+        return response()->json($borrows);
+    }
+
+    public function generateBorrowListPDF($startDate, $endDate)
+    {
+        $borrows = Borrow::with('borrower', 'approver', 'office', 'equipment')
+        ->whereDate('created_at', '>=', $startDate)
+        ->whereDate('created_at', '<=', $endDate)
+        ->orderBy('id', 'desc')->get();
+
+        $pdf = PDF::loadView('borrow-report/borrow-list',  array( 'borrows' => $borrows, 'startDate' => $startDate, 'endDate' => $endDate));
+        $pdf->setPaper('A4', 'landscape');
+        return $pdf->download('gen-services-borrow-list.pdf');
+        // return $borrows;
+    }
 }

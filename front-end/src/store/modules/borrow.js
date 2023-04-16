@@ -39,6 +39,15 @@ export default {
         throw error;
       }
     },
+    async fetchAllBorrows({ commit }) {
+      try {
+        const { data } = await borrow.fetchBorrows();
+        // const array = await utils.filterData(this.state.auth.userCredential.data.office_id, data);
+        commit('SET_BORROWS', data);
+      } catch (error) {
+        throw error;
+      }
+    },
     async fetchConsentBorrows({ commit }) {
       try {
         const { data } = await borrow.fetchBorrows();
@@ -67,9 +76,9 @@ export default {
         throw e;
       }
     },
-    async consentBorrow({ commit }, [payload, id]) {
+    async forwardBorrow({ commit }, [payload, id]) {
       try {
-        await borrow.consentBorrow([payload, id]);
+        await borrow.forwardBorrow([payload, id]);
       } catch (e) {
         throw e;
       }
@@ -108,5 +117,9 @@ export default {
       const { data } = await borrow.getBorrowStatistics();
       commit('SET_BORROW_STATISTICS', data);
     },
+
+    borrowReportListPdf({ commit }, payload) {
+      borrow.borrowReportListPdf(payload);
+    }
   },
 };

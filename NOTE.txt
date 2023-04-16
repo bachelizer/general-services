@@ -11,3 +11,6 @@ alter tbl maintenance nullabel serve_by_id kay dili pa ma entry kung kinsa mg re
 **** NOTE ****
 Copy the table data of role
 always put the GENERAL SERVICES id to 1 at the office table
+
+
+alter table borrows column promise_return_date into string

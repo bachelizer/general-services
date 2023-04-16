@@ -46,4 +46,6 @@ class EquipmentController extends Controller
         ], 200);
     }
 
+   
+
 }

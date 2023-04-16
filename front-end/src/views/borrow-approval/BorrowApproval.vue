@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <v-card>
-        <PageTitle :title="'Borrow'" :subTitle="'Panel for borrows.'" />
+        <PageTitle :title="'Borrow Approval'" :subTitle="'Panel for borrows approval.'" />
         <v-col>
           <v-row>
             <v-col cols="8" md="5">
@@ -15,15 +15,9 @@
               ></v-text-field>
             </v-col>
             <v-spacer></v-spacer>
-            <v-btn elevation="2" small class="mr-10 mt-2" fab color="primary">
-              <v-icon @click="(dialog = true), (borrow = {}), (action = 'create')">
-                <!-- <v-icon> -->
-                {{ icons.mdiPlus }}
-              </v-icon>
-            </v-btn>
           </v-row>
         </v-col>
-        <v-data-table :headers="headers" :items="borrows" :search="search">
+        <v-data-table :headers="headers" :items="borrowsApproval" :search="search">
           <template v-slot:item.approval_status="{ item }">
             <v-chip small class="ma-2" :color="getStatusColor(item.approval_status)">
               {{ item.approval_status }}
@@ -40,15 +34,15 @@
           </template>
         </v-data-table>
       </v-card>
-      <borrow-form
-        v-if= "dialog == true"
+      <borrow-approval-form
+        v-if="dialog == true"
         @close="(dialog = false), (borrow = {}), (action = '')"
         @reload="onload"
         :data="borrow"
         :action="action"
         :dialog="dialog"
         :status="status"
-      ></borrow-form>
+      ></borrow-approval-form>
     </v-col>
   </v-row>
 </template>
@@ -57,13 +51,13 @@ import { mapState, mapActions } from 'vuex';
 
 import { mdiPlus } from '@mdi/js';
 import PageTitle from '@/components/PageTitle.vue';
-import BorrowForm from './BorrowForm.vue';
+import BorrowApprovalForm from '@/views/borrow-approval/BorrowApprovalForm.vue';
 
 import utils from '../../helper/utils/utils';
 
 export default {
-  components: { PageTitle, BorrowForm },
-  name: 'Borrow',
+  components: { PageTitle, BorrowApprovalForm },
+  name: 'BorrowApproval',
   data() {
     return {
       dialog: false,
@@ -107,9 +101,9 @@ export default {
     this.onload();
   },
   methods: {
-    ...mapActions('borrow', ['fetchBorrows']),
+    ...mapActions('borrow', ['fetchAllBorrows']),
     onload() {
-      this.fetchBorrows();
+      this.fetchAllBorrows();
     },
     view(data) {
       this.borrow = data;
@@ -128,6 +122,12 @@ export default {
   },
   computed: {
     ...mapState('borrow', ['borrows']),
+    ...mapState('auth', ['userCredential']),
+    borrowsApproval() {
+      return this.borrows.filter(x => {
+        return x.approver_id === this.userCredential.data.id;
+      });
+    },
   },
 };
 </script>

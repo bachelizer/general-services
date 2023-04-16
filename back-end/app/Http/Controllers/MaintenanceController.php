@@ -119,6 +119,18 @@ class MaintenanceController extends Controller
         return response()->json($maintenances);
     }
 
+    public function generateServiceListPDF($startDate, $endDate)
+    {
+        $maintenances = Maintenance::with('request_by', 'served_by', 'office', 'equipment', 'service')
+            ->whereDate('created_at', '>=', $startDate)
+            ->whereDate('created_at', '<=', $endDate)
+            ->orderBy('id', 'desc')->get();
+
+        $pdf = PDF::loadView('maintenance-report/maintenace-list',  array( 'maintain' => $maintenances, 'startDate' => $startDate, 'endDate' => $endDate));
+        $pdf->setPaper('A4', 'landscape');
+        return $pdf->download('gen-services-maintenance-list.pdf');
+    }
+
     public function generatePDF(BorrowRequest $request)
     {
         $id = $request->get('id');

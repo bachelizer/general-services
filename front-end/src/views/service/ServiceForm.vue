@@ -11,10 +11,8 @@
               <v-row>
                 <v-col cols="12">
                   <v-select
-                    :readonly="
-                      disableFulfilled || disableServed || disablePending || !disableCreate
-                    "
-                    v-model="data.office_id"
+                    readonly
+                    v-model="officeId"
                     :items="offices"
                     item-text="office"
                     item-value="id"
@@ -47,7 +45,7 @@
                   <v-autocomplete
                     :readonly="disableFulfilled || disableServed || disablePending"
                     v-model="data.office_equipment_id"
-                    :items="officeEquipments"
+                    :items="userEquipments"
                     item-text="code"
                     item-value="id"
                     label="Equipment"
@@ -62,7 +60,7 @@
                 <v-row>
                   <v-col cols="12">
                     <v-text-field
-                      :readonly="disableFulfilled || disableServed"
+                      :readonly="disableFulfilled || disableServed || !isAdmin"
                       v-model="data.action_taken"
                       label="Action Taken"
                       required
@@ -90,7 +88,7 @@
                         ></v-text-field>
                       </template>
                       <v-time-picker
-                        :readonly="disableFulfilled || disableServed"
+                        :readonly="disableFulfilled || disableServed || !isAdmin"
                         v-if="timeStartMenu"
                         v-model="data.time_start"
                         full-width
@@ -119,7 +117,7 @@
                         ></v-text-field>
                       </template>
                       <v-time-picker
-                        :readonly="disableFulfilled || disableServed"
+                        :readonly="disableFulfilled || disableServed || !isAdmin"
                         v-if="timeEndMenu"
                         v-model="data.time_end"
                         full-width
@@ -145,7 +143,7 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker
-                        :readonly="disableFulfilled || disableServed"
+                        :readonly="disableFulfilled || disableServed || !isAdmin"
                         v-model="data.date_served"
                         @input="dateMenu = false"
                       ></v-date-picker>
@@ -164,7 +162,7 @@
                   <v-col col>
                     <v-select
                       v-if="!tickThirdParty"
-                      :readonly="disableFulfilled || disableServed"
+                      :readonly="disableFulfilled || disableServed || !isAdmin"
                       v-model="data.serve_by_id"
                       :items="maintener"
                       :item-text="x => `${x.last_name}, ${x.first_name}`"
@@ -177,7 +175,7 @@
                 <v-row>
                   <v-col cols="12">
                     <v-checkbox
-                      :disabled="disableFulfilled || disableServed"
+                      :disabled="disableFulfilled || disableServed || !isAdmin"
                       v-model="tickThirdParty"
                       label="3rd party service"
                     ></v-checkbox>
@@ -252,10 +250,11 @@
               >
                 Serve
               </v-btn>
-              <v-btn v-if="disableServed" color="primary darken-1" text type="submit">
-                Fulfill
-              </v-btn>
+             
             </div>
+            <v-btn v-if="disableServed && !isAdmin" color="primary darken-1" text type="submit">
+                Evaluate
+              </v-btn>
 
             <v-btn v-if="disableFulfilled" color="primary darken-1" text type="submit">
               Print
@@ -323,7 +322,11 @@ export default {
     async handleSubmit() {
       try {
         if (this.action === 'create' || this.status === '') {
-          await this.postMaintenance(this.data);
+          const payload = {
+            office_id: this.officeId,
+            ...this.data,
+          };
+          await this.postMaintenance(payload);
           this.$emit('close');
         }
         if (this.status === 'pending') {
@@ -385,6 +388,19 @@ export default {
     },
     isGeneralServices() {
       return this.userCredential.data.office_id === 1;
+    },
+    officeId() {
+      return this.userCredential.data.office_id === 1
+        ? this.data.office_id
+        : this.userCredential.data.office_id;
+    },
+    userEquipments() {
+      if (this.userCredential.data.office_id !== 1) {
+        return this.officeEquipments.filter(x => {
+          return x.custodian.id === this.userCredential.data.id;
+        });
+      }
+      return this.officeEquipments;
     },
   },
 };

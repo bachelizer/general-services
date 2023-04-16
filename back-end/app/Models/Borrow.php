@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Borrow extends Model
 {
     use HasFactory;
-    protected $fillable = ['borrower_id', 'approver_id', 'office_id', 'equipment_id', 'qty', 'purpose', 'rejection_remarks', 'date_borrowed', 'date_returned', 'approval_status'];
+    protected $fillable = ['borrower_id', 'borrower_office_id', 'approver_id', 'office_id', 'equipment_id', 'qty', 'purpose', 'rejection_remarks', 'date_borrowed', 'date_returned', 'approval_status', 'promise_return_date', 'mr_id'];
 
     public function office()
     {

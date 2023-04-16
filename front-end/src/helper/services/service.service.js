@@ -18,6 +18,11 @@ const serviceReport = payload =>
     payload,
   );
 
+const serviceReportListPdf = payload =>
+  generalServicesClient.get(
+    `/maintenance/report-pdf/${payload.startDate}/${payload.endDate}`
+  );
+
 const servicePDF = id => generalServicesClient.get(`/maintenances/report/generate-pdf?id=${id}`);
 
 const getServicesStatistics = () => generalServicesClient.get('/maintenance/statistics');
@@ -31,4 +36,5 @@ export default {
   serviceReport,
   servicePDF,
   getServicesStatistics,
+  serviceReportListPdf,
 };

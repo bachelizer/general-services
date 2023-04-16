@@ -52,6 +52,11 @@
         :to="{ name: 'borrow' }"
         :icon="icons.mdiSwapHorizontal"
       ></nav-menu-link>
+      <nav-menu-link
+        title="Borrow Approval"
+        :to="{ name: 'borrow-approval' }"
+        :icon="icons.mdiSwapHorizontal"
+      ></nav-menu-link>
 
       <div v-if="isAdmin">
         <nav-menu-section-title title="USER INTERFACE"></nav-menu-section-title>

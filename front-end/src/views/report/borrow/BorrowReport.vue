@@ -43,7 +43,7 @@
         </v-col>
         <v-col>
           <v-row justify="end">
-            <v-btn @click="excelExport" class="mt-2" color="primary darken-1" tile>
+            <v-btn @click="pdfExport" class="mt-2" color="primary darken-1" tile>
               Download Data
             </v-btn>
           </v-row>
@@ -107,7 +107,7 @@ export default {
   },
   created() {},
   methods: {
-    ...mapActions('borrow', ['borrowReportData']),
+    ...mapActions('borrow', ['borrowReportData', 'borrowReportListPdf']),
     async generate() {
       const payload = {
         startDate: this.dates[0],
@@ -125,28 +125,33 @@ export default {
     spliceString(text) {
       return utils.spliceLongString(text, 30);
     },
-    excelExport() {
-      const data = [
-        {
-          sheet: 'Borrow',
-          columns: [
-            { label: 'Approval Status', value: 'approval_status' }, // Top level data
-            { label: 'Office', value: 'office.office' },
-            { label: 'Borrower Name', value: (row) => `${row.borrower.first_name}  ${row.borrower.last_name}` },
-            // { label: 'Borrower First Name', value: 'borrower.first_name' },
-            { label: 'Equipment', value: 'equipment.code' },
-            { label: 'Qty.', value: 'qty' },
-            { label: 'Purpose.', value: 'purpose' },
-            { label: 'Rejection Remarks.', value: 'rejection_remarks' },
-            { label: 'Date Borrowed.', value: 'date_borrowed' },
-          ],
-          content: this.reportData,
-        },
-      ];
-      const settings = {
-        fileName:  `${this.dateRangeText}-borrow-report`,
+    pdfExport() {
+      const payload = {
+        startDate: this.dates[0],
+        endDate: this.dates[1],
       };
-      xlsx(data, settings);
+      this.borrowReportListPdf(payload);
+      // const data = [
+      //   {
+      //     sheet: 'Borrow',
+      //     columns: [
+      //       { label: 'Approval Status', value: 'approval_status' }, // Top level data
+      //       { label: 'Office', value: 'office.office' },
+      //       { label: 'Borrower Name', value: (row) => `${row.borrower.first_name}  ${row.borrower.last_name}` },
+      //       // { label: 'Borrower First Name', value: 'borrower.first_name' },
+      //       { label: 'Equipment', value: 'equipment.code' },
+      //       { label: 'Qty.', value: 'qty' },
+      //       { label: 'Purpose.', value: 'purpose' },
+      //       { label: 'Rejection Remarks.', value: 'rejection_remarks' },
+      //       { label: 'Date Borrowed.', value: 'date_borrowed' },
+      //     ],
+      //     content: this.reportData,
+      //   },
+      // ];
+      // const settings = {
+      //   fileName:  `${this.dateRangeText}-borrow-report`,
+      // };
+      // xlsx(data, settings);
     },
   },
   computed: {

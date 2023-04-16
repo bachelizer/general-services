@@ -104,7 +104,7 @@ export default {
   },
   created() {},
   methods: {
-    ...mapActions('service', ['serviceReportData']),
+    ...mapActions('service', ['serviceReportData', 'serviceReportListPdf']),
     async generate() {
       const payload = {
         startDate: this.dates[0],
@@ -122,33 +122,38 @@ export default {
       return utils.spliceLongString(text, 30);
     },
     excelExport() {
-      const data = [
-        {
-          sheet: 'Services',
-          columns: [
-            { label: 'Status', value: 'request_status' }, // Top level data
-            { label: 'Office', value: 'office.office' },
-            {
-              label: 'Request By',
-              value: row => `${row.request_by.first_name}  ${row.request_by.last_name}`,
-            },
-            // { label: 'Borrower First Name', value: 'borrower.first_name' },
-            { label: 'Details', value: 'reason' },
-            { label: 'Equipment.', value: 'equipment' },
-            { label: 'Service Type.', value: 'service.service' },
-            { label: 'Served By', value: row => row.served_by ? `${row.served_by.first_name}  ${row.served_by.last_name}` : '' },
-            { label: 'Date filed.', value: 'date_filed' },
-            { label: 'Date served.', value: 'date_served' },
-            { label: 'Satisfaction', value: 'satisfaction' },
-            { label: 'Remarks/Recommendations.', value: 'remarks' },
-          ],
-          content: this.reportData,
-        },
-      ];
-      const settings = {
-        fileName: `${this.dateRangeText}-service-report`,
+      const payload = {
+        startDate: this.dates[0],
+        endDate: this.dates[1],
       };
-      xlsx(data, settings);
+      this.serviceReportListPdf(payload);
+    //   const data = [
+    //     {
+    //       sheet: 'Services',
+    //       columns: [
+    //         { label: 'Status', value: 'request_status' }, // Top level data
+    //         { label: 'Office', value: 'office.office' },
+    //         {
+    //           label: 'Request By',
+    //           value: row => `${row.request_by.first_name}  ${row.request_by.last_name}`,
+    //         },
+    //         // { label: 'Borrower First Name', value: 'borrower.first_name' },
+    //         { label: 'Details', value: 'reason' },
+    //         { label: 'Equipment.', value: 'equipment' },
+    //         { label: 'Service Type.', value: 'service.service' },
+    //         { label: 'Served By', value: row => row.served_by ? `${row.served_by.first_name}  ${row.served_by.last_name}` : '' },
+    //         { label: 'Date filed.', value: 'date_filed' },
+    //         { label: 'Date served.', value: 'date_served' },
+    //         { label: 'Satisfaction', value: 'satisfaction' },
+    //         { label: 'Remarks/Recommendations.', value: 'remarks' },
+    //       ],
+    //       content: this.reportData,
+    //     },
+    //   ];
+    //   const settings = {
+    //     fileName: `${this.dateRangeText}-service-report`,
+    //   };
+    //   xlsx(data, settings);
     },
   },
   computed: {

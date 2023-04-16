@@ -46,7 +46,7 @@ export default {
       // eslint-disable-next-line no-useless-catch
       try {
         const { data } = await service.fetchMaintenance();
-        const array = await utils.filterData(this.state.auth.userCredential.data.office_id, data);
+        const array = await utils.filterDataServices(this.state.auth.userCredential.data.office_id, data);
         commit('SET_MAINTENANCES', array);
       } catch (error) {
         throw error;
@@ -105,5 +105,8 @@ export default {
       const { data } = await service.getServicesStatistics();
       commit('SET_SERVICES_STATISTICS', data);
     },
+    serviceReportListPdf({ commit }, payload) {
+      service.serviceReportListPdf(payload)
+    }
   },
 };

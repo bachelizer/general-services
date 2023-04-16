@@ -13,6 +13,4 @@ class Equipment extends Model
     public $timestamps = false;
     protected $table = 'equipments';
     protected $fillable = ['equipment', 'maintenance_interval'];
-
-  
 }

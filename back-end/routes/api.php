@@ -51,6 +51,7 @@ Route::get('office-equipments/{id}', [OfficeEquipmentController::class, 'show'])
 Route::post('office-equipments', [OfficeEquipmentController::class, 'store']);
 Route::get('office-equipment-maintenance-notification', [OfficeEquipmentController::class, 'regularMaintenanceNotification']);
 Route::put('office-equipments/regular-maintenace/{id}',[OfficeEquipmentController::class, 'regularOfficeEquipmentMaintenance']);
+Route::get('/user-equipments/{userId}',[OfficeEquipmentController::class, 'fetchUserEquipment']);
 
 
 Route::get('maintenances', [MaintenanceController::class, 'index']);
@@ -63,16 +64,19 @@ Route::put('maintenances/evaluate/{id}', [MaintenanceController::class, 'evaluat
 Route::get('/maintenances/report/{startDate}/{endDate}',[MaintenanceController::class, 'report']);
 Route::get('/maintenances/report/generate-pdf',[MaintenanceController::class, 'generatePDF']);
 Route::get('/maintenance/statistics',[MaintenanceController::class, 'serviceDashboardStatistics']);
+Route::get('/maintenance/report-pdf/{startDate}/{endDate}',[MaintenanceController::class, 'generateServiceListPDF']);
+
 
 Route::get('/services',[ServiceTypeController::class, 'index']);
 
 Route::get('/borrows',[BorrowController::class, 'index']);
 Route::post('/borrows',[BorrowController::class, 'store']);
 Route::put('/borrows/approve/{id}',[BorrowController::class, 'approve']);
-Route::put('/borrows/consent/{id}',[BorrowController::class, 'consent']);
+Route::put('/borrows/forward/{id}',[BorrowController::class, 'forward']);
 Route::put('/borrows/reject/{id}',[BorrowController::class, 'reject']);
 Route::put('/borrows/return/{id}',[BorrowController::class, 'return']);
 Route::get('/borrows/report/{startDate}/{endDate}',[BorrowController::class, 'report']);
+Route::get('/borrows/report-pdf/{startDate}/{endDate}',[BorrowController::class, 'generateBorrowListPDF']);
 Route::get('/borrows/report/generate-pdf',[BorrowController::class, 'generatePDF']);
 Route::get('/borrows/statistics', [BorrowController::class, 'borrowDashBoardStatistics']);
 

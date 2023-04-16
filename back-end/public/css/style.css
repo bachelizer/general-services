@@ -4,7 +4,15 @@
     box-sizing: border-box;
 }
 
+.table {
+    border-collapse: collapse;
+}
 
+.table
+th,
+.table td {
+    border: 1px solid;
+}
 
 .head-logo {
     width: 100px;
@@ -18,7 +26,7 @@
     /* margin-top: 7px; */
 }
 
-.margin-50{
+.margin-50 {
     margin-right: 500px;
 }
 
@@ -33,15 +41,18 @@
 .mt-20 {
     margin-top: 20px;
 }
- .mb-10 {
+.mb-10 {
     margin-bottom: 10px;
- }
+}
+
+.mx-10 {
+    margin: 15px 0 15px 0;
+}
 
 .head-title {
     text-transform: uppercase;
     font-size: 15px;
     font-weight: bolder;
-    
 }
 
 .form-title {
