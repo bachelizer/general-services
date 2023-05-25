@@ -76,6 +76,13 @@ export default {
         throw e;
       }
     },
+    async processBorrow({ commit }, id) {
+      try {
+        await borrow.processBorrow(id);
+      } catch (e) {
+        throw e;
+      }
+    },
     async forwardBorrow({ commit }, [payload, id]) {
       try {
         await borrow.forwardBorrow([payload, id]);

@@ -14,7 +14,7 @@ use App\Models\Outsources;
 class Maintenance extends Model
 {
     use HasFactory;
-    protected $fillable = ['request_status', 'request_by_id', 'serve_by_id', 'office_id', 'office_equipment_id', 'service_id', 'serve_by_3rd_id', 'reason', 'action_taken', 'remarks', 'equipment_status', 'date_filed', 'time_start', 'time_end'];
+    protected $fillable = ['request_status', 'request_by_id', 'serve_by_id', 'office_id', 'office_equipment_id', 'service_id', 'serve_by_3rd_id', 'reason', 'action_taken', 'remarks', 'equipment_status', 'date_filed', 'time_start', 'date_served_end', 'time_end'];
 
     public function request_by()
     {

@@ -60,6 +60,7 @@ Route::post('maintenances', [MaintenanceController::class, 'store']);
 Route::put('maintenances/approval/{id}', [MaintenanceController::class, 'approval']); // update approval status
 Route::put('maintenances', [MaintenanceController::class, 'update']); // after the maintenance update the request 
 Route::put('maintenances/served/{id}', [MaintenanceController::class, 'served']);
+Route::put('maintenances/process/{id}', [MaintenanceController::class, 'process']);
 Route::put('maintenances/evaluate/{id}', [MaintenanceController::class, 'evaluate']);
 Route::get('/maintenances/report/{startDate}/{endDate}',[MaintenanceController::class, 'report']);
 Route::get('/maintenances/report/generate-pdf',[MaintenanceController::class, 'generatePDF']);
@@ -72,6 +73,7 @@ Route::get('/services',[ServiceTypeController::class, 'index']);
 Route::get('/borrows',[BorrowController::class, 'index']);
 Route::post('/borrows',[BorrowController::class, 'store']);
 Route::put('/borrows/approve/{id}',[BorrowController::class, 'approve']);
+Route::put('/borrows/process/{id}',[BorrowController::class, 'process']);
 Route::put('/borrows/forward/{id}',[BorrowController::class, 'forward']);
 Route::put('/borrows/reject/{id}',[BorrowController::class, 'reject']);
 Route::put('/borrows/return/{id}',[BorrowController::class, 'return']);

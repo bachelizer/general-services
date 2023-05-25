@@ -8,6 +8,9 @@ const postMaintenance = data => generalServicesClient.post('/maintenances', data
 const servedMaintenance = (data, id) =>
   generalServicesClient.put(`/maintenances/served/${id}`, data);
 
+const processMaintenance = (id) =>
+  generalServicesClient.put(`/maintenances/process/${id}`);
+
 const evaluateMaintenance = (data, id) =>
   generalServicesClient.put(`maintenances/evaluate/${id}`, data);
 const fetchServices = () => generalServicesClient.get('/services');
@@ -37,4 +40,5 @@ export default {
   servicePDF,
   getServicesStatistics,
   serviceReportListPdf,
+  processMaintenance,
 };

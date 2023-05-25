@@ -12,6 +12,8 @@ use PDF;
 
 use DB;
 
+use Carbon\Carbon;
+
 class MaintenanceController extends Controller
 {
     //
@@ -38,7 +40,7 @@ class MaintenanceController extends Controller
             'date_filed' => now()->toDateString(),
         ]);
         $maintenance->save();
-        
+
         return response()->json([
             'status' => true,
             'message' => "Successfully Added",
@@ -48,7 +50,7 @@ class MaintenanceController extends Controller
     public function update(Request $request, $id)
     {
         $maintenance = Maintenance::find($id);
-        
+
         $maintenance->serve_by_id = $request->get('serve_by_id');
         $maintenance->action_taken = $request->get('action_taken');
         $maintenance->remarks = $request->get('remarks');
@@ -56,7 +58,7 @@ class MaintenanceController extends Controller
         $maintenance->time_start = $request->get('time_start');
         $maintenance->time_end = $request->get('time_end');
         $maintenance->save();
-        
+
         return response()->json([
             'status' => true,
             'message' => "Successfully Updated Maintenance",
@@ -66,10 +68,10 @@ class MaintenanceController extends Controller
     public function approval(Request $request, $id)
     {
         $maintenance = Maintenance::find($id);
-        
+
         $maintenance->request_status = $request->get('request_status');
         $maintenance->save();
-        
+
         return response()->json([
             'status' => true,
             'message' => "Successfully Updated Approval",
@@ -79,31 +81,48 @@ class MaintenanceController extends Controller
     public function served(Request $request, $id)
     {
         $maintenance = Maintenance::find($id);
-        
+
         $maintenance->request_status = 'Served';
         $maintenance->serve_by_id =  $request->get('serve_by_id');
         $maintenance->serve_by_3rd_id =  $request->get('serve_by_3rd_id');
-        $maintenance->time_start =  $request->get('time_start');
+        // $maintenance->time_start =  substr(now()->toTimeString(), 0, 5);
         $maintenance->time_end =  $request->get('time_end');
         $maintenance->action_taken =  $request->get('action_taken');
-        $maintenance->date_served =  $request->get('date_served');
+        $maintenance->date_served_end =  $request->get('date_served_end');
+        // $maintenance->date_served = now()->toDateString();
         $maintenance->save();
-        
+
         return response()->json([
             'status' => true,
             'message' => "Successfully Served",
         ], 200);
     }
 
+    public function process($id)
+    {
+        $maintenance = Maintenance::find($id);
+
+        $maintenance->request_status = 'In Process';
+        $maintenance->time_start =  substr(now()->toTimeString(), 0, 5);
+        $maintenance->date_served = now()->toDateString();
+        $maintenance->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => "Successfully Served",
+        ], 200);
+    }
+
+
     public function evaluate(Request $request, $id)
     {
         $maintenance = Maintenance::find($id);
-        
+
         $maintenance->request_status = 'Fulfilled';
         $maintenance->satisfaction =  $request->get('satisfaction');
         $maintenance->remarks =  $request->get('remarks');
         $maintenance->save();
-        
+
         return response()->json([
             'status' => true,
             'message' => "Successfully Evaluated",
@@ -126,7 +145,7 @@ class MaintenanceController extends Controller
             ->whereDate('created_at', '<=', $endDate)
             ->orderBy('id', 'desc')->get();
 
-        $pdf = PDF::loadView('maintenance-report/maintenace-list',  array( 'maintain' => $maintenances, 'startDate' => $startDate, 'endDate' => $endDate));
+        $pdf = PDF::loadView('maintenance-report/maintenace-list',  array('maintain' => $maintenances, 'startDate' => $startDate, 'endDate' => $endDate));
         $pdf->setPaper('A4', 'landscape');
         return $pdf->download('gen-services-maintenance-list.pdf');
     }
@@ -139,12 +158,12 @@ class MaintenanceController extends Controller
         return $pdf->download('gen-services-service.pdf');
     }
 
-    public function serviceDashboardStatistics() 
+    public function serviceDashboardStatistics()
     {
         $services = DB::table('maintenances')
-        ->select('request_status', DB::raw('count(request_status) as total'))
-        ->groupBy('request_status')
-        ->get();
+            ->select('request_status', DB::raw('count(request_status) as total'))
+            ->groupBy('request_status')
+            ->get();
         return response()->json($services);
     }
 }

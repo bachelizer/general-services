@@ -38,7 +38,14 @@
         </v-data-table>
       </v-card>
     </v-col>
-    <ServiceForm :action="action" :status="status" :dialog="dialog" :data="data" @close="close" @reload="onLoad"/>
+    <ServiceForm
+      :action="action"
+      :status="status"
+      :dialog="dialog"
+      :data="data"
+      @close="close"
+      @reload="onLoad"
+    />
   </v-row>
 </template>
 <script>
@@ -108,6 +115,7 @@ export default {
       if (status === 'Pending') return 'warning';
       if (status === 'Served') return 'success';
       if (status === 'Fulfilled') return 'primary';
+      if (status === 'In Process') return 'info';
       return null;
     },
     onVeiw(item) {
@@ -122,6 +130,9 @@ export default {
       }
       if (item.request_status === 'Fulfilled') {
         this.status = 'fulfilled';
+      }
+      if (item.request_status === 'In Process') {
+        this.status = 'ip';
       }
     },
     close() {

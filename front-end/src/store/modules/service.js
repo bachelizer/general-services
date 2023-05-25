@@ -79,6 +79,13 @@ export default {
         throw e;
       }
     },
+    async processMaintenance({ commit }, id) {
+      try {
+        await service.processMaintenance(id);
+      } catch (e) {
+        throw e;
+      }
+    },
     async evaluateMaintenance({ commit }, [data, id]) {
       try {
         await service.evaluateMaintenance(data, id);

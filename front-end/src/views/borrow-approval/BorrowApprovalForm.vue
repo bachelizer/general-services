@@ -121,16 +121,29 @@
                 Close
               </v-btn>
 
-              <div v-if="data.approval_status === 'Forwarded'">
-                <v-btn @click="rejectDialog" color="error darken-1" text>
+              <div v-if="data.approval_status === 'In Process'">
+                <!-- <v-btn @click="rejectDialog" color="error darken-1" text>
                   Reject
-                </v-btn>
+                </v-btn> -->
                 <v-btn
                   @click="approve"
                   color="success darken-1"
                   text
                 >
                   Approve
+                </v-btn>
+              </div>
+
+              <div v-if="data.approval_status === 'Forwarded'">
+                <v-btn @click="rejectDialog" color="error darken-1" text>
+                  Reject
+                </v-btn>
+                <v-btn
+                  @click="process"
+                  color="info darken-1"
+                  text
+                >
+                  Process
                 </v-btn>
               </div>
 
@@ -213,7 +226,7 @@ export default {
       'forwardBorrow',
       'rejectBorrow',
       'returnBorrow',
-      'printForm',
+      'printForm', 'processBorrow'
     ]),
     ...mapActions('office', ['fetchOffice']),
     ...mapActions('user', ['fetchUsers', 'fetchUserEquipments']),
@@ -265,6 +278,19 @@ export default {
           approver_id: this.userCredential.data.user_id, // take the user_id from the state
         };
         await this.approveBorrow([payload, this.data.id]);
+        this.reload();
+        this.$emit('close');
+      } catch (e) {
+        alert(e.message);
+      }
+    },
+
+     async process() {
+      try {
+       /*  const payload = {
+          approver_id: this.userCredential.data.user_id, // take the user_id from the state
+        }; */
+        await this.processBorrow(this.data.id);
         this.reload();
         this.$emit('close');
       } catch (e) {

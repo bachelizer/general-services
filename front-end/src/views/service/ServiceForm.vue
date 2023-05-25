@@ -66,8 +66,33 @@
                       required
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="4">
-                    <v-menu
+                         <v-col cols="3">
+                   <!--  <v-menu
+                      v-model="dateMenu"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on, attrs }"> -->
+                        <v-text-field
+                          v-model="data.date_served"
+                          label="Start Date"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                     <!--  </template>
+                      <v-date-picker
+                        readonly
+                        v-model="data.date_served"
+                        @input="dateMenu = false"
+                      ></v-date-picker> -->
+                    </v-menu>
+                  </v-col>
+                  <v-col cols="3">
+                    <!-- <v-menu
                       ref="timeStartMenu"
                       v-model="timeStartMenu"
                       :close-on-content-click="false"
@@ -78,7 +103,7 @@
                       max-width="290px"
                       min-width="290px"
                     >
-                      <template v-slot:activator="{ on, attrs }">
+                      <template v-slot:activator="{ on, attrs }"> -->
                         <v-text-field
                           v-model="data.time_start"
                           label="Time started"
@@ -86,16 +111,41 @@
                           v-bind="attrs"
                           v-on="on"
                         ></v-text-field>
-                      </template>
+                      <!-- </template>
                       <v-time-picker
-                        :readonly="disableFulfilled || disableServed || !isAdmin"
+                        readonly
                         v-if="timeStartMenu"
                         v-model="data.time_start"
                         full-width
                         @click:minute="$refs.timeStartMenu.save(data.time_start)"
                       ></v-time-picker> </v-menu
-                  ></v-col>
-                  <v-col cols="4">
+                  > --></v-col>
+                         <v-col cols="3">
+                    <v-menu
+                      v-model="dateEndMenu"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="data.date_served_end"
+                          label="End Date"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        :readonly="disableFulfilled || disableServed || !isAdmin"
+                        v-model="data.date_served_end"
+                        @input="dateEndMenu = false"
+                      ></v-date-picker>
+                    </v-menu>
+                  </v-col>
+                  <v-col cols="3">
                     <v-menu
                       ref="timeEndMenu"
                       v-model="timeEndMenu"
@@ -124,31 +174,7 @@
                         @click:minute="$refs.timeEndMenu.save(data.time_end)"
                       ></v-time-picker> </v-menu
                   ></v-col>
-                  <v-col cols="4">
-                    <v-menu
-                      v-model="dateMenu"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="290px"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="data.date_served"
-                          label="Date Served"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        :readonly="disableFulfilled || disableServed || !isAdmin"
-                        v-model="data.date_served"
-                        @input="dateMenu = false"
-                      ></v-date-picker>
-                    </v-menu>
-                  </v-col>
+           
                 </v-row>
                 <v-row>
                   <v-col col>
@@ -241,9 +267,20 @@
             <v-btn v-if="disableCreate" color="primary darken-1" text type="submit">
               Submit Request
             </v-btn>
+             <div v-if="isAdmin">
+              <v-btn
+                v-if="disablePending && isGeneralServices && status == 'pending'"
+                color="info darken-1"
+                text
+                type="submit"
+              >
+                Process
+              </v-btn>
+             
+            </div>
             <div v-if="isAdmin">
               <v-btn
-                v-if="disablePending && isGeneralServices"
+                v-if="disablePending && isGeneralServices && status == 'ip'"
                 color="primary darken-1"
                 text
                 type="submit"
@@ -294,6 +331,7 @@ export default {
       timeStartMenu: false,
       timeEndMenu: false,
       dateMenu: false,
+      dateEndMenu: false,
       tickThirdParty: false,
     };
   },
@@ -308,7 +346,7 @@ export default {
       'postMaintenance',
       'servedMaintenance',
       'evaluateMaintenance',
-      'servicePDF',
+      'servicePDF', 'processMaintenance',
     ]),
     ...mapActions('user', ['fetchUsers']),
     ...mapActions('outsource', ['fetchOutSources']),
@@ -330,6 +368,11 @@ export default {
           this.$emit('close');
         }
         if (this.status === 'pending') {
+          // alert('SERVED ACTION!');
+          // console.log(this.data)
+          await this.processMaintenance(this.data.id);
+        }
+        if (this.status === 'ip') {
           // alert('SERVED ACTION!');
           // console.log(this.data)
           await this.servedMaintenance([this.data, this.data.id]);
@@ -375,7 +418,7 @@ export default {
       return this.action === 'create' ? false : this.status === 'served';
     },
     disablePending() {
-      return this.action === 'create' ? false : this.status === 'pending';
+      return this.action === 'create' ? false : this.status === 'ip';
     },
     disableCreate() {
       return this.action === 'create';

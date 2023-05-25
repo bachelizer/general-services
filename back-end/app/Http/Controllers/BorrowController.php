@@ -62,6 +62,20 @@ class BorrowController extends Controller
         ], 200);
     }
 
+    public function process($id)
+    {
+        $borrows = Borrow::find($id);
+
+        $borrows->approval_status = 'In Process';
+        // $borrows->approver_id = $request->get('approver_id');// $request->get('approver_id'); this should take the approver id
+        $borrows->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => "Successfully Served",
+        ], 200);
+    }
+
     public function forward(Request $request, $id)
     {
         $borrows = Borrow::find($id);
